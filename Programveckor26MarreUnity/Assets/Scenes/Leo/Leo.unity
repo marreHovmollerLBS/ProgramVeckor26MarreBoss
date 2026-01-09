@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 284183ce31768294dad2f1a874bda3b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorController
-  cursorTextureDefault: {fileID: 2800000, guid: 95b71caa2de69f942b0083012beaece4, type: 3}
+  cursorTextureDefault: {fileID: 2800000, guid: bcda5857b68762b4fb595b1d48a1b8fb, type: 3}
   clickPosition: {x: 0, y: 0}
 --- !u!4 &825627443
 Transform:
