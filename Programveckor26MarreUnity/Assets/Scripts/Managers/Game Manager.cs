@@ -139,6 +139,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 Vector3 doorPos = doors[doorIndex].transform.position;
+                doorPos.z = 1;
 
                 if (enemyData.enemyType == EnemyType.BasicEnemy)
                 {
