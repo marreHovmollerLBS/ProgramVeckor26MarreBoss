@@ -24,13 +24,16 @@ public class GameManager : MonoBehaviour
     [Header("Ui")]
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private RectTransform sliderTransform;
-    [SerializeField] private Image sliderImgage;
+    [SerializeField] private Image sliderImage;
 
     [Header("Cinemachine")]
     [SerializeField] CinemachineCamera cinemachineCamera;
 
     [Header("Round Manager")]
     [SerializeField] private RoundManager roundManager;
+
+    [Header("Children")]
+    public Transform doorsParent;
 
     private List<GameObject> doors = new List<GameObject>();
 
@@ -43,12 +46,13 @@ public class GameManager : MonoBehaviour
 
         cinemachineCamera.Follow = player.transform;
 
-        //Find all childs (doors)
-        for (int i = 0; i < transform.childCount; i++)
+        //Find all doors
+        for (int i = 0; i < doorsParent.childCount; i++)
         {
-            doors.Add(transform.GetChild(i).gameObject);
+            doors.Add(doorsParent.GetChild(i).gameObject);
         }
-        sliderImgage.color = Color.white;
+        
+        sliderImage.color = Color.white;
     }
 
     void Update()
@@ -65,7 +69,7 @@ public class GameManager : MonoBehaviour
             {
                 isGoodDream = false;
                 currentTime = 0;
-                sliderImgage.color = Color.red;
+                sliderImage.color = Color.red;
                 dreamCount++;
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour
             {
                 isGoodDream = true;
                 currentTime = 0;
-                sliderImgage.color = Color.white;
+                sliderImage.color = Color.white;
                 dreamCount++;
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
@@ -86,7 +90,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
+    
     void StartTimer()
     {
         startTime = (int)Time.time;
