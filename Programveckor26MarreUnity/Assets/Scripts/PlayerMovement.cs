@@ -11,7 +11,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         Direction = Vector2.zero;
-        Speed = 2;
     }
 
     // Update is called once per frame
