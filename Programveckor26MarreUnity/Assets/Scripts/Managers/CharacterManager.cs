@@ -8,26 +8,29 @@ public class CharacterManager : MonoBehaviour
     [Header("Prefabs (Optional - will create if not assigned)")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject defaultEnemyPrefab;
-    
+
     [Header("Attack Types")]
     [SerializeField] private AttackType meleeAttack;
     [SerializeField] private AttackType rangedAttack;
     [SerializeField] private AttackType aoeAttack;
-    
+
     [Header("Sprites (Optional)")]
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private Sprite defaultEnemySprite;
-    
+
     [Header("Dream State")]
     [SerializeField] private bool isGoodDream = true;
-    
+
+    [Header("Enemy Spawn Settings")]
+    [SerializeField] private float defaultSpawnIdleTime = 1f; // Default idle time for all enemies
+
     /// <summary>
     /// Spawn and initialize a player character
     /// </summary>
     public Player SpawnPlayer(Vector3 position, float speed = 4f, float health = 100f, float damage = 10f, float size = 0.5f, AttackType attackType = null)
     {
         GameObject playerObj;
-        
+
         if (playerPrefab != null)
         {
             playerObj = Instantiate(playerPrefab, position, Quaternion.identity);
@@ -45,24 +48,24 @@ public class CharacterManager : MonoBehaviour
         {
             player = playerObj.AddComponent<Player>();
         }
-        
+
         // Use provided attack type or default to melee
         AttackType attack = attackType ?? meleeAttack;
         player.InitializePlayer(speed, health, damage, attack, isGoodDream);
-        
+
         if (playerSprite != null)
         {
             player.SetSprite(playerSprite);
         }
-        
+
         Debug.Log($"Player spawned at {position}");
         return player;
     }
 
     /// <summary>
-    /// Spawn and initialize a Default enemy
+    /// Spawn and initialize a Default enemy with customizable spawn idle time
     /// </summary>
-    public DefaultEnemy SpawnDefaultEnemy(Vector3 position, float speed = 2f, float health = 50f, float damage = 8f, float size = 0.5f, AttackType attackType = null)
+    public DefaultEnemy SpawnDefaultEnemy(Vector3 position, float speed = 2f, float health = 50f, float damage = 8f, float size = 0.5f, AttackType attackType = null, float spawnIdleTime = -1f)
     {
         GameObject enemyObj = CreateEnemyObject(defaultEnemyPrefab, position, "Default Enemy");
 
@@ -72,15 +75,18 @@ public class CharacterManager : MonoBehaviour
             defaultEnemy = enemyObj.AddComponent<DefaultEnemy>();
         }
 
+        // Use default spawn idle time if not specified
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
         AttackType attack = attackType ?? meleeAttack;
-        defaultEnemy.InitializeEnemy(speed, health, damage, size, attack, isGoodDream);
+        defaultEnemy.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
 
         if (defaultEnemySprite != null)
         {
             defaultEnemy.SetSprite(defaultEnemySprite);
         }
 
-        Debug.Log($"Default Enemy spawned at {position}");
+        Debug.Log($"Default Enemy spawned at {position} with {idleTime}s spawn idle time");
         return defaultEnemy;
     }
 
@@ -100,29 +106,37 @@ public class CharacterManager : MonoBehaviour
             return obj;
         }
     }
-    
+
     /// <summary>
     /// Change the dream state for all characters
     /// </summary>
     public void SetDreamState(bool goodDream)
     {
         isGoodDream = goodDream;
-        
+
         // Update all existing characters
-        Character[] allCharacters = FindObjectsOfType<Character>();
+        Character[] allCharacters = FindObjectsByType<Character>(FindObjectsSortMode.None);
         foreach (Character character in allCharacters)
         {
             character.IsGoodDream = goodDream;
         }
-        
+
         Debug.Log($"Dream state changed to: {(goodDream ? "Good Dream" : "Bad Dream")}");
     }
-    
+
     /// <summary>
     /// Toggle dream state
     /// </summary>
     public void ToggleDreamState()
     {
         SetDreamState(!isGoodDream);
+    }
+
+    /// <summary>
+    /// Set the default spawn idle time for all future enemy spawns
+    /// </summary>
+    public void SetDefaultSpawnIdleTime(float time)
+    {
+        defaultSpawnIdleTime = time;
     }
 }

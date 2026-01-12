@@ -19,9 +19,9 @@ public class DefaultEnemy : Enemy
         }
     }
 
-    public override void InitializeEnemy(float speed, float health, float dmg, float sze, AttackType attack, bool goodDream = false)
+    public override void InitializeEnemy(float speed, float health, float dmg, float sze, AttackType attack, bool goodDream = false, float spawnIdleTime = 1f)
     {
-        base.InitializeEnemy(speed, health, dmg, sze, attack, goodDream);
-        gameObject.name = "Scout Enemy";
+        base.InitializeEnemy(speed, health, dmg, sze, attack, goodDream, spawnIdleTime);
+        gameObject.name = "Default Enemy";
     }
 }

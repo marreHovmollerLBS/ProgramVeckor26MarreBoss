@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     [Header("Ui")]
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private RectTransform sliderTransform;
-    [SerializeField] private Image sliderImage;
+    [SerializeField] private Image sliderImgage;
 
     [Header("Cinemachine")]
     [SerializeField] CinemachineCamera cinemachineCamera;
@@ -32,8 +32,12 @@ public class GameManager : MonoBehaviour
     [Header("Round Manager")]
     [SerializeField] private RoundManager roundManager;
 
-    [Header("Children")]
-    public Transform doorsParent;
+    [Header("Spawn Patterns")]
+    [SerializeField] private SpawnPatternsData spawnPatterns;
+
+    [Header("Sound")]
+    [SerializeField] private AudioSource goodDreamMusic;
+    [SerializeField] private AudioSource badDreamMusic;
 
     private List<GameObject> doors = new List<GameObject>();
 
@@ -46,13 +50,11 @@ public class GameManager : MonoBehaviour
 
         cinemachineCamera.Follow = player.transform;
 
-        //Find all doors
-        for (int i = 0; i < doorsParent.childCount; i++)
+        // Collect all doors
+        for (int i = 0; i < transform.childCount; i++)
         {
-            doors.Add(doorsParent.GetChild(i).gameObject);
+            doors.Add(transform.GetChild(i).gameObject);
         }
-        
-        sliderImage.color = Color.white;
     }
 
     void Update()
@@ -69,10 +71,14 @@ public class GameManager : MonoBehaviour
             {
                 isGoodDream = false;
                 currentTime = 0;
-                sliderImage.color = Color.red;
+                sliderImgage.color = Color.red;
                 dreamCount++;
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
+
+                //Play Evil Music
+                goodDreamMusic.Stop();
+                badDreamMusic.Play();
             }
         }
         else
@@ -82,21 +88,27 @@ public class GameManager : MonoBehaviour
             {
                 isGoodDream = true;
                 currentTime = 0;
-                sliderImage.color = Color.white;
+                sliderImgage.color = Color.white;
                 dreamCount++;
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
+
+                //Play Good Music
+                badDreamMusic.Stop();
+                goodDreamMusic.Play();
             }
         }
-
     }
-    
+
     void StartTimer()
     {
         startTime = (int)Time.time;
         countDownText.text = (countDownTime - startTime).ToString();
         if (startTime >= countDownTime)
         {
+            //Start Music after start timer
+            goodDreamMusic.Play();
+
             countDownText.text = "";
             isGameActive = true;
             SpawnEnemies();
@@ -106,21 +118,31 @@ public class GameManager : MonoBehaviour
     void SpawnEnemies()
     {
         Round round = roundManager.rounds[dreamCount];
-        int[] usedDoors = new int[doors.Count];
 
         foreach (EnemySpawnData enemyData in round.enemies)
         {
             Debug.Log($"Enemy Type: {enemyData.enemyType}, Count: {enemyData.spawnCount}");
 
-            for (int i = 0; i < enemyData.spawnCount; i++)
+            // Get the predetermined door indices for this spawn count
+            int[] doorIndices = spawnPatterns.GetDoorIndices(enemyData.spawnCount);
+
+            //Spawn Specific Enemy at predetermined doors
+            for (int i = 0; i < enemyData.spawnCount && i < doorIndices.Length; i++)
             {
-                int randomDoorNumber = Random.Range(0, doors.Count - 1);
-                usedDoors[i] = randomDoorNumber;
-                Vector3 randomDoorPos = doors[randomDoorNumber].transform.position;
+                int doorIndex = doorIndices[i];
+
+                // Safety check
+                if (doorIndex < 0 || doorIndex >= doors.Count)
+                {
+                    Debug.LogError($"Door index {doorIndex} is out of range! You have {doors.Count} doors.");
+                    continue;
+                }
+
+                Vector3 doorPos = doors[doorIndex].transform.position;
 
                 if (enemyData.enemyType == EnemyType.BasicEnemy)
                 {
-                    manager.SpawnDefaultEnemy(randomDoorPos);
+                    manager.SpawnDefaultEnemy(doorPos);
                 }
             }
         }
