@@ -4,27 +4,40 @@ using TMPro;
 
 public class ExitScript : MonoBehaviour
 {
-    public bool SwitchActivated;
-    public bool SwitchAllowed;
     public bool IsGoodDream;
-    TextMeshPro Text;
+    public TextMeshProUGUI Text;
+
+    private bool SwitchActivated;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SwitchActivated = false;
-        SwitchAllowed = true;
-        Text = "";
+        Text.text = "";
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E))
+        if (IsGoodDream)
         {
-            SwitchActivated = !SwitchActivated;
-            Debug.Log($"SwitchActivated is {SwitchActivated}");
+            string onOrOff = SwitchActivated ? "On" : "Off";
+            Text.text = $"E: Toggle Exit ({onOrOff})";
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                SwitchActivated = !SwitchActivated;
+                Debug.Log($"SwitchActivated is {SwitchActivated}");
+            }
         }
-        if (SwitchActivated && SwitchAllowed)
+        else
+        {
+            Text.text = ("");
+            SwitchActivated = false;
+        }
+    }
+    public void OnSwitchToBadDream()
+    {
+        if (SwitchActivated)
         {
             SceneManager.LoadScene("Bedroom");
         }

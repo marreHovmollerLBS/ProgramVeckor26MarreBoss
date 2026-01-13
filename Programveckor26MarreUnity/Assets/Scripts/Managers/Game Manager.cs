@@ -67,11 +67,12 @@ public class GameManager : MonoBehaviour
         currentTime += Time.deltaTime;
         if (isGoodDream)
         {
-            exitScript.SwitchAllowed = true;
+            exitScript.IsGoodDream = true;
 
             sliderTransform.localScale = new Vector2(currentTime / goodDreamTime, sliderTransform.localScale.y);
             if (currentTime >= goodDreamTime)
             {
+                exitScript.OnSwitchToBadDream();
                 isGoodDream = false;
                 currentTime = 0;
                 sliderImgage.color = Color.red;
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            exitScript.SwitchAllowed = false;
+            exitScript.IsGoodDream = false;
 
             sliderTransform.localScale = new Vector2(currentTime / badDreamTime, sliderTransform.localScale.y);
             if (currentTime >= badDreamTime)
