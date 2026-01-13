@@ -10,11 +10,17 @@ public abstract class Enemy : Character
     [SerializeField] protected float attackDistance = 1.5f;
     [SerializeField] protected LayerMask playerLayer;
 
+    [Header("Combat Settings")]
+    [SerializeField] protected bool usesAttackState = false; // Whether this enemy uses attack state or collision damage
+    [SerializeField] protected float collisionDamageCooldown = 1f; // Cooldown for collision damage
+    [SerializeField] protected float collisionKnockbackForce = 5f;
+
     [Header("Spawn Settings")]
     [SerializeField] protected float idleSpawnTime = 1f; // Time enemy is idle after spawning
 
     protected Character target;
     protected float nextAttackTime;
+    protected float nextCollisionDamageTime;
     protected float spawnTimer;
     protected bool isSpawning = true;
 
@@ -43,6 +49,7 @@ public abstract class Enemy : Character
         spawnTimer = 0f;
         isSpawning = true;
         currentState = EnemyState.Idle;
+        nextCollisionDamageTime = 0f;
     }
 
     protected override void HandleBehavior()
@@ -67,7 +74,6 @@ public abstract class Enemy : Character
 
         // Always look at target when active
         LookAtTarget();
-
     }
 
     /// <summary>
@@ -104,9 +110,10 @@ public abstract class Enemy : Character
         {
             float distanceToTarget = Vector2.Distance(transform.position, target.transform.position);
 
-            if (distanceToTarget <= attackDistance)
+            // Only use attack state if this enemy type uses it
+            if (usesAttackState && distanceToTarget <= attackDistance)
             {
-                // Attack
+                // Attack state behavior
                 currentState = EnemyState.Attack;
                 moveDirection = Vector2.zero;
 
@@ -118,7 +125,7 @@ public abstract class Enemy : Character
             }
             else
             {
-                // Chase
+                // Chase behavior (for all enemies, including collision damage enemies)
                 currentState = EnemyState.Chase;
                 Vector2 direction = (target.transform.position - transform.position).normalized;
                 moveDirection = direction;
@@ -140,7 +147,34 @@ public abstract class Enemy : Character
         }
     }
 
-    //Get enemys to  look at target
+    /// <summary>
+    /// Handle collision damage for enemies that don't use attack state
+    /// </summary>
+    protected virtual void OnCollisionStay2D(Collision2D collision)
+    {
+        // Only deal collision damage if not using attack state
+        if (!usesAttackState && !isSpawning && !isGoodDream)
+        {
+            Character target = collision.gameObject.GetComponent<Character>();
+
+            // Check if it's the player (or another valid target) and cooldown is ready
+            if (target != null && target != this && Time.time >= nextCollisionDamageTime)
+            {
+                // Calculate knockback direction (away from this enemy)
+                Vector2 knockbackDir = (target.transform.position - transform.position).normalized;
+
+                // Deal damage with knockback
+                target.TakeDamage(damage, knockbackDir * collisionKnockbackForce);
+
+                // Set next damage time
+                nextCollisionDamageTime = Time.time + collisionDamageCooldown;
+
+                Debug.Log($"{gameObject.name} dealt {damage} collision damage to {target.name}!");
+            }
+        }
+    }
+
+    //Get enemys to look at target
     protected virtual void LookAtTarget()
     {
         if (target == null) return;
@@ -155,12 +189,10 @@ public abstract class Enemy : Character
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-
-
     /// <summary>
     /// Override TakeDamage to make enemy invulnerable during spawn
     /// </summary>
-    public override void TakeDamage(float damageAmount)
+    public override void TakeDamage(float damageAmount, Vector2 knockbackDirection)
     {
         // Invulnerable during spawn idle state
         if (isSpawning)
@@ -169,7 +201,15 @@ public abstract class Enemy : Character
             return;
         }
 
-        base.TakeDamage(damageAmount);
+        base.TakeDamage(damageAmount, knockbackDirection);
+    }
+
+    /// <summary>
+    /// Backward compatibility for damage without knockback
+    /// </summary>
+    public override void TakeDamage(float damageAmount)
+    {
+        TakeDamage(damageAmount, Vector2.zero);
     }
 
     protected override void Die()
@@ -226,21 +266,55 @@ public abstract class Enemy : Character
         return currentState;
     }
 
+    /// <summary>
+    /// Set whether this enemy uses attack state or collision damage
+    /// </summary>
+    public void SetUsesAttackState(bool value)
+    {
+        usesAttackState = value;
+    }
+
+    /// <summary>
+    /// Set collision damage cooldown
+    /// </summary>
+    public void SetCollisionDamageCooldown(float cooldown)
+    {
+        collisionDamageCooldown = cooldown;
+    }
+
+    /// <summary>
+    /// Set collision knockback force
+    /// </summary>
+    public void SetCollisionKnockbackForce(float force)
+    {
+        collisionKnockbackForce = force;
+    }
+
     protected void OnDrawGizmosSelected()
     {
         // Visualize detection radius in editor
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
-        // Visualize attack distance
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, attackDistance);
+        // Visualize attack distance (only if using attack state)
+        if (usesAttackState)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, attackDistance);
+        }
 
         // Visualize spawn state
         if (isSpawning)
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, 0.5f);
+        }
+
+        // Draw collision damage indicator
+        if (!usesAttackState)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, 0.3f);
         }
     }
 }
