@@ -16,3 +16,4 @@ MonoBehaviour:
   attackCooldown: 1
   damageMultiplier: 1
   aoeRadius: 3
+  knockbackForce: 4
