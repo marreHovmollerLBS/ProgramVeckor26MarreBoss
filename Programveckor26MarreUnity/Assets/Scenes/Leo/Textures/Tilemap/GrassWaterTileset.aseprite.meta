@@ -163,9 +163,19 @@ ScriptedImporter:
       height: 32
     spriteID: 347bd4fef417405438a3813994149458
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: -4}
+      - {x: 2, y: -4}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -184,9 +194,19 @@ ScriptedImporter:
       height: 32
     spriteID: dd0e6b8e63a25dd46b0607f112b9fd7f
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: -4}
+      - {x: -16, y: -4}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -205,9 +225,19 @@ ScriptedImporter:
       height: 32
     spriteID: 084c2d70ac925f54a89071a62509b331
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: -2, y: -16}
+      - {x: -2, y: -4}
+      - {x: -16, y: -4}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -247,9 +277,19 @@ ScriptedImporter:
       height: 32
     spriteID: 85e59653f8aca7b46a138a5482bceadc
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: 16}
+      - {x: 2, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -270,7 +310,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -289,9 +334,19 @@ ScriptedImporter:
       height: 32
     spriteID: 9fd9915acdc772f4d9fe4155bbcf0c28
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: -2, y: -16}
+      - {x: -2, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -310,9 +365,19 @@ ScriptedImporter:
       height: 32
     spriteID: 787737164b6cfa140a99e35144b0d273
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: 4}
+      - {x: 16, y: 4}
+      - {x: 16, y: 16}
+      - {x: 2, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -331,9 +396,19 @@ ScriptedImporter:
       height: 32
     spriteID: 56f269eda255a0b4baa2979f9b6af22f
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: 4}
+      - {x: 16, y: 4}
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -352,9 +427,19 @@ ScriptedImporter:
       height: 32
     spriteID: 6567b6f7441d14645b1dc839ac654aaa
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: 4}
+      - {x: -2, y: 4}
+      - {x: -2, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
