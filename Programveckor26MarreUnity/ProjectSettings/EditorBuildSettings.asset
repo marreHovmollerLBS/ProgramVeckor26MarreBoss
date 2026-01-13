@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Marre/MarreScen.unity
+    guid: a9ccc8e903bcefe4dbf52029848043c7
+  - enabled: 1
+    path: Assets/Scenes/Marre/Bedroom.unity
+    guid: ef3089118137aba4dbd345408300f8e7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
