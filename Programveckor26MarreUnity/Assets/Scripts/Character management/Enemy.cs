@@ -64,6 +64,10 @@ public abstract class Enemy : Character
             // Bad dream: Enemies chase player
             HandleChaseState();
         }
+
+        // Always look at target when active
+        LookAtTarget();
+
     }
 
     /// <summary>
@@ -135,6 +139,23 @@ public abstract class Enemy : Character
             moveDirection = direction;
         }
     }
+
+    //Get enemys to  look at target
+    protected virtual void LookAtTarget()
+    {
+        if (target == null) return;
+
+        // Calculate direction vector from enemy to target
+        Vector2 direction = target.transform.position - transform.position;
+
+        // Calculate angle in degrees (atan2 returns radians, so we convert)
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Apply rotation around Z-axis (for 2D top-down)
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
+
+
 
     /// <summary>
     /// Override TakeDamage to make enemy invulnerable during spawn
