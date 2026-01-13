@@ -23,7 +23,7 @@ public class ExitScript : MonoBehaviour
             string onOrOff = SwitchActivated ? "On" : "Off";
             Text.text = $"E: Toggle Exit ({onOrOff})";
 
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 SwitchActivated = !SwitchActivated;
                 Debug.Log($"SwitchActivated is {SwitchActivated}");
