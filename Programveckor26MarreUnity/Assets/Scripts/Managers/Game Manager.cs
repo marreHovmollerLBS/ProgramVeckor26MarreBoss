@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     private CharacterManager manager;
+    private ExitScript exitScript;
 
     bool isGameActive = false;
     bool isGoodDream = true;
@@ -66,6 +67,8 @@ public class GameManager : MonoBehaviour
         currentTime += Time.deltaTime;
         if (isGoodDream)
         {
+            exitScript.SwitchAllowed = true;
+
             sliderTransform.localScale = new Vector2(currentTime / goodDreamTime, sliderTransform.localScale.y);
             if (currentTime >= goodDreamTime)
             {
@@ -83,6 +86,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            exitScript.SwitchAllowed = false;
+
             sliderTransform.localScale = new Vector2(currentTime / badDreamTime, sliderTransform.localScale.y);
             if (currentTime >= badDreamTime)
             {
