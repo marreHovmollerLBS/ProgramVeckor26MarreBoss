@@ -165,7 +165,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: -4}
+      - {x: 2, y: -4}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -186,7 +191,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: -4}
+      - {x: -16, y: -4}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -207,7 +217,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: -2, y: -16}
+      - {x: -2, y: -4}
+      - {x: -16, y: -4}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -228,7 +243,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: 16}
+      - {x: 2, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -270,7 +290,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: -2, y: -16}
+      - {x: -2, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -291,7 +316,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: 4}
+      - {x: 16, y: 4}
+      - {x: 16, y: 16}
+      - {x: 2, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -312,7 +342,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: 4}
+      - {x: 16, y: 4}
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -333,7 +368,12 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: 4}
+      - {x: -2, y: 4}
+      - {x: -2, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -354,7 +394,14 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: -2, y: -16}
+      - {x: -2, y: 4}
+      - {x: 16, y: 4}
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -375,7 +422,14 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: 4}
+      - {x: 2, y: 4}
+      - {x: 2, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -396,7 +450,14 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: -4}
+      - {x: -2, y: -4}
+      - {x: -2, y: 16}
+      - {x: -16, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
@@ -417,7 +478,14 @@ ScriptedImporter:
     spriteBone: []
     spriteOutline: []
     vertices: []
-    spritePhysicsOutline: []
+    spritePhysicsOutline:
+    - outline:
+      - {x: 2, y: -4}
+      - {x: -16, y: -4}
+      - {x: -16, y: -16}
+      - {x: 16, y: -16}
+      - {x: 16, y: 16}
+      - {x: 2, y: 16}
     indices: 
     edges: []
     tessellationDetail: 0
