@@ -8,6 +8,8 @@ public class CharacterManager : MonoBehaviour
     [Header("Prefabs (Optional - will create if not assigned)")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject defaultEnemyPrefab;
+    [SerializeField] private GameObject rangedEnemyPrefab;
+    [SerializeField] private GameObject tankEnemyPrefab;
 
     [Header("Attack Types")]
     [SerializeField] private AttackType meleeAttack;
@@ -17,6 +19,8 @@ public class CharacterManager : MonoBehaviour
     [Header("Sprites (Optional)")]
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private Sprite defaultEnemySprite;
+    [SerializeField] private Sprite rangedEnemySprite;
+    [SerializeField] private Sprite tankEnemySprite;
 
     [Header("Dream State")]
     [SerializeField] private bool isGoodDream = true;
@@ -63,11 +67,12 @@ public class CharacterManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Spawn and initialize a Default enemy with customizable spawn idle time
+    /// Spawn and initialize a Default enemy (uses collision damage)
     /// </summary>
     public DefaultEnemy SpawnDefaultEnemy(Vector3 position, float speed = 2f, float health = 50f, float damage = 8f, float size = 0.5f, AttackType attackType = null, float spawnIdleTime = -1f)
     {
         GameObject enemyObj = CreateEnemyObject(defaultEnemyPrefab, position, "Default Enemy");
+        enemyObj.transform.localScale = Vector3.one * size;
 
         DefaultEnemy defaultEnemy = enemyObj.GetComponent<DefaultEnemy>();
         if (defaultEnemy == null)
@@ -78,6 +83,7 @@ public class CharacterManager : MonoBehaviour
         // Use default spawn idle time if not specified
         float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
 
+        // Default enemies don't need an attack type, but we'll pass it for consistency
         AttackType attack = attackType ?? meleeAttack;
         defaultEnemy.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
 
@@ -86,8 +92,67 @@ public class CharacterManager : MonoBehaviour
             defaultEnemy.SetSprite(defaultEnemySprite);
         }
 
-        Debug.Log($"Default Enemy spawned at {position} with {idleTime}s spawn idle time");
+        Debug.Log($"Default Enemy spawned at {position} with {idleTime}s spawn idle time (collision damage mode)");
         return defaultEnemy;
+    }
+
+    /// <summary>
+    /// Spawn and initialize a Ranged enemy (uses attack state)
+    /// </summary>
+    public RangedEnemy SpawnRangedEnemy(Vector3 position, float speed = 1.5f, float health = 30f, float damage = 12f, float size = 0.5f, float spawnIdleTime = -1f)
+    {
+        GameObject enemyObj = CreateEnemyObject(rangedEnemyPrefab, position, "Ranged Enemy");
+        enemyObj.transform.localScale = Vector3.one * size;
+
+        RangedEnemy rangedEnemy = enemyObj.GetComponent<RangedEnemy>();
+        if (rangedEnemy == null)
+        {
+            rangedEnemy = enemyObj.AddComponent<RangedEnemy>();
+        }
+
+        // Use default spawn idle time if not specified
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
+        // Ranged enemies need ranged attack type
+        rangedEnemy.InitializeEnemy(speed, health, damage, size, rangedAttack, isGoodDream, idleTime);
+
+        if (rangedEnemySprite != null)
+        {
+            rangedEnemy.SetSprite(rangedEnemySprite);
+        }
+
+        Debug.Log($"Ranged Enemy spawned at {position} with {idleTime}s spawn idle time (attack state mode)");
+        return rangedEnemy;
+    }
+
+    /// <summary>
+    /// Spawn and initialize a Tank enemy (uses attack state)
+    /// </summary>
+    public TankEnemy SpawnTankEnemy(Vector3 position, float speed = 1f, float health = 150f, float damage = 20f, float size = 0.75f, float spawnIdleTime = -1f)
+    {
+        GameObject enemyObj = CreateEnemyObject(tankEnemyPrefab, position, "Tank Enemy");
+        enemyObj.transform.localScale = Vector3.one * size;
+
+        TankEnemy tankEnemy = enemyObj.GetComponent<TankEnemy>();
+        if (tankEnemy == null)
+        {
+            tankEnemy = enemyObj.AddComponent<TankEnemy>();
+        }
+
+        // Use default spawn idle time if not specified
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
+        // Tank enemies can use melee or AOE attack
+        AttackType attack = aoeAttack ?? meleeAttack;
+        tankEnemy.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
+
+        if (tankEnemySprite != null)
+        {
+            tankEnemy.SetSprite(tankEnemySprite);
+        }
+
+        Debug.Log($"Tank Enemy spawned at {position} with {idleTime}s spawn idle time (attack state mode)");
+        return tankEnemy;
     }
 
     /// <summary>

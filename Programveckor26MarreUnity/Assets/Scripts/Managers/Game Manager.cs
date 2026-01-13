@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         manager = GetComponent<CharacterManager>();
+        exitScript = GetComponent<ExitScript>();
 
         // Spawn player
         Player player = manager.SpawnPlayer(Vector3.zero, speed: 4f, health: 100f, damage: 10f, size: 0.5f);

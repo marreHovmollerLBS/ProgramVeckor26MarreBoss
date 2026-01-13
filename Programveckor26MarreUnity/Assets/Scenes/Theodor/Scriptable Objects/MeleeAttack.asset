@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166361e46696a5b40997a1a3b638cce5, type: 3}
   m_Name: MeleeAttack
   m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
-  attackRange: 2
+  attackRange: 1
   attackCooldown: 1
   damageMultiplier: 1
