@@ -11987,7 +11987,7 @@ MonoBehaviour:
   meleeAttack: {fileID: 11400000, guid: 08a8f40eb636a2f469fc019512388786, type: 2}
   rangedAttack: {fileID: 0}
   aoeAttack: {fileID: 0}
-  playerSprite: {fileID: 4565712808963722855, guid: 13af2e9d9acdb0d458a2797c43d6b447, type: 3}
+  playerSprite: {fileID: -6170461516133679532, guid: 0e94e109f83e2f14e9790c7a1253088c, type: 3}
   defaultEnemySprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   rangedEnemySprite: {fileID: 0}
   tankEnemySprite: {fileID: 0}
