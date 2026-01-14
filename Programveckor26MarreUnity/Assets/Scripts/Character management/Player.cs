@@ -3,32 +3,79 @@ using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
-/// Player character class
+/// Player character class with integrated attack system
 /// </summary>
 public class Player : Character
 {
     [Header("Player Settings")]
     [SerializeField] private string horizontalAxis = "Horizontal";
     [SerializeField] private string verticalAxis = "Vertical";
-    [SerializeField] private KeyCode attackKey = KeyCode.Mouse0;
+
+    [Header("Attack Input")]
+    [SerializeField] private KeyCode meleeAttackKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode groundSlamKey = KeyCode.V;
+    [SerializeField] private KeyCode bombKey = KeyCode.C;
+
+    [Header("Attack Components")]
+    private PlayerMeleeAttack meleeAttack;
+    private PlayerShootAttack shootAttack;
+    private PlayerGroundSlamAttack groundSlamAttack;
+    private PlayerBombAttack bombAttack;
 
     private List<Upgrade> upgrades = new();
-    
+
     protected override void Awake()
     {
         base.Awake();
-        
+
         // Player specific initialization
         gameObject.tag = "Player";
         gameObject.layer = LayerMask.NameToLayer("Player");
+
+        // Initialize attack components
+        InitializeAttackComponents();
+    }
+
+    /// <summary>
+    /// Initialize all attack components
+    /// </summary>
+    private void InitializeAttackComponents()
+    {
+        // Add melee attack (always available)
+        meleeAttack = GetComponent<PlayerMeleeAttack>();
+        if (meleeAttack == null)
+        {
+            meleeAttack = gameObject.AddComponent<PlayerMeleeAttack>();
+        }
+
+        // Add shoot attack (unlockable)
+        shootAttack = GetComponent<PlayerShootAttack>();
+        if (shootAttack == null)
+        {
+            shootAttack = gameObject.AddComponent<PlayerShootAttack>();
+        }
+
+        // Add ground slam attack (unlockable)
+        groundSlamAttack = GetComponent<PlayerGroundSlamAttack>();
+        if (groundSlamAttack == null)
+        {
+            groundSlamAttack = gameObject.AddComponent<PlayerGroundSlamAttack>();
+        }
+
+        // Add bomb attack (unlockable)
+        bombAttack = GetComponent<PlayerBombAttack>();
+        if (bombAttack == null)
+        {
+            bombAttack = gameObject.AddComponent<PlayerBombAttack>();
+        }
     }
 
     protected override void HandleBehavior()
     {
         HandleInput();
-        HandleAttack();
+        HandleAttacks();
     }
-    
+
     /// <summary>
     /// Handle player input for movement
     /// </summary>
@@ -37,33 +84,63 @@ public class Player : Character
         float horizontal = Input.GetAxisRaw(horizontalAxis);
         float vertical = Input.GetAxisRaw(verticalAxis);
 
-        moveDirection = new Vector3(horizontal,vertical,0f).normalized;
+        moveDirection = new Vector3(horizontal, vertical, 0f).normalized;
     }
 
     /// <summary>
-    /// Handle attack input
+    /// Handle all attack inputs
     /// </summary>
-    private void HandleAttack()
+    private void HandleAttacks()
     {
-        if (Input.GetKeyDown(attackKey))
+        // Melee attack (left mouse button) - always fires melee, also fires shoot if unlocked
+        if (Input.GetKeyDown(meleeAttackKey))
         {
-            //Attack();
+            // Perform melee attack
+            if (meleeAttack != null)
+            {
+                meleeAttack.TryAttack();
+            }
+
+            // Also perform shoot attack if unlocked
+            if (shootAttack != null && shootAttack.IsUnlocked())
+            {
+                shootAttack.TryAttack();
+            }
+        }
+
+        // Ground slam attack (V key)
+        if (Input.GetKeyDown(groundSlamKey))
+        {
+            if (groundSlamAttack != null)
+            {
+                groundSlamAttack.TryAttack();
+            }
+        }
+
+        // Bomb attack (C key)
+        if (Input.GetKeyDown(bombKey))
+        {
+            if (bombAttack != null)
+            {
+                bombAttack.TryAttack();
+            }
         }
     }
-    
+
     protected override void Die()
     {
         base.Die();
         Debug.Log("Player has died! Game Over!");
         // Implement game over logic
+        // You can add a death screen, restart level, etc.
     }
-    
+
     protected override void OnDreamStateChanged()
     {
         base.OnDreamStateChanged();
         Debug.Log($"Player dream state changed to: {(isGoodDream ? "Good Dream" : "Bad Dream")}");
     }
-    
+
     /// <summary>
     /// Public method to initialize player from external script
     /// </summary>
@@ -76,7 +153,7 @@ public class Player : Character
         attackType = attack;
         isGoodDream = goodDream;
     }
-    
+
     /// <summary>
     /// Set the player sprite
     /// </summary>
@@ -87,6 +164,7 @@ public class Player : Character
             spriteRenderer.sprite = sprite;
         }
     }
+
     /// <summary>
     /// Changes the player's stats (and possibly abilities) depending on unlocked upgrades
     /// </summary>
@@ -97,4 +175,60 @@ public class Player : Character
             upg.ApplyUpgrade(this);
         }
     }
+
+    #region Attack Unlock Methods
+
+    /// <summary>
+    /// Unlock the shoot attack
+    /// </summary>
+    public void UnlockShootAttack()
+    {
+        if (shootAttack != null)
+        {
+            shootAttack.Unlock();
+        }
+    }
+
+    /// <summary>
+    /// Unlock the ground slam attack
+    /// </summary>
+    public void UnlockGroundSlamAttack()
+    {
+        if (groundSlamAttack != null)
+        {
+            groundSlamAttack.Unlock();
+        }
+    }
+
+    /// <summary>
+    /// Unlock the bomb attack
+    /// </summary>
+    public void UnlockBombAttack()
+    {
+        if (bombAttack != null)
+        {
+            bombAttack.Unlock();
+        }
+    }
+
+    /// <summary>
+    /// Unlock all attacks (for testing)
+    /// </summary>
+    public void UnlockAllAttacks()
+    {
+        UnlockShootAttack();
+        UnlockGroundSlamAttack();
+        UnlockBombAttack();
+    }
+
+    #endregion
+
+    #region Attack Component Getters
+
+    public PlayerMeleeAttack GetMeleeAttack() => meleeAttack;
+    public PlayerShootAttack GetShootAttack() => shootAttack;
+    public PlayerGroundSlamAttack GetGroundSlamAttack() => groundSlamAttack;
+    public PlayerBombAttack GetBombAttack() => bombAttack;
+
+    #endregion
 }

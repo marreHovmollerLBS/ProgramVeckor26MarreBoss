@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 4a2f7facaf781bc408ca6ef829b6f8b4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - hitboxSprite: {fileID: 4028467936095065616, guid: 1e5ff80dcb1f86b4790cb3a7a95a75a5, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

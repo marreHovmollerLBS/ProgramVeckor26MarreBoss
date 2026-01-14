@@ -2,6 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Manager class to spawn and configure characters from external scripts
+/// Updated to support player attack visuals
 /// </summary>
 public class CharacterManager : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private Sprite defaultEnemySprite;
     [SerializeField] private Sprite rangedEnemySprite;
     [SerializeField] private Sprite tankEnemySprite;
+
+    [Header("Player Attack Visuals (Optional)")]
+    [SerializeField] private Sprite meleeAttackSprite; // Sprite for melee attack hitbox visual
+    [SerializeField] private Color meleeAttackColor = new Color(1f, 0f, 0f, 0.3f);
+    [SerializeField] private bool showMeleeVisual = true;
 
     [Header("Dream State")]
     [SerializeField] private bool isGoodDream = true;
@@ -62,8 +68,37 @@ public class CharacterManager : MonoBehaviour
             player.SetSprite(playerSprite);
         }
 
+        // Configure melee attack visuals
+        ConfigurePlayerAttackVisuals(player);
+
         Debug.Log($"Player spawned at {position}");
         return player;
+    }
+
+    /// <summary>
+    /// Configure player attack visual settings
+    /// </summary>
+    private void ConfigurePlayerAttackVisuals(Player player)
+    {
+        // Get the melee attack component
+        PlayerMeleeAttack meleeAttackComponent = player.GetMeleeAttack();
+
+        if (meleeAttackComponent != null)
+        {
+            // Set the melee attack sprite if provided
+            if (meleeAttackSprite != null)
+            {
+                meleeAttackComponent.SetHitboxSprite(meleeAttackSprite);
+            }
+
+            // Set the visual color
+            meleeAttackComponent.SetHitboxColor(meleeAttackColor);
+
+            // Set whether to show visual
+            meleeAttackComponent.SetShowVisual(showMeleeVisual);
+
+            Debug.Log($"Player melee attack visuals configured: Sprite={meleeAttackSprite != null}, Color={meleeAttackColor}, Show={showMeleeVisual}");
+        }
     }
 
     /// <summary>
@@ -203,5 +238,21 @@ public class CharacterManager : MonoBehaviour
     public void SetDefaultSpawnIdleTime(float time)
     {
         defaultSpawnIdleTime = time;
+    }
+
+    /// <summary>
+    /// Set the melee attack sprite at runtime
+    /// </summary>
+    public void SetMeleeAttackSprite(Sprite sprite)
+    {
+        meleeAttackSprite = sprite;
+    }
+
+    /// <summary>
+    /// Set the melee attack color at runtime
+    /// </summary>
+    public void SetMeleeAttackColor(Color color)
+    {
+        meleeAttackColor = color;
     }
 }

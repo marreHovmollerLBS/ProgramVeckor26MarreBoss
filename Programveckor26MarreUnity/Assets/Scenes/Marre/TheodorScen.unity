@@ -1369,10 +1369,13 @@ MonoBehaviour:
   meleeAttack: {fileID: 11400000, guid: 08a8f40eb636a2f469fc019512388786, type: 2}
   rangedAttack: {fileID: 0}
   aoeAttack: {fileID: 0}
-  playerSprite: {fileID: 7482667652216324306, guid: 8b05041fe552ba942867f28ad2e8d229, type: 3}
-  defaultEnemySprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  playerSprite: {fileID: -1586911388072342259, guid: d267681e7bfb96a48b0c8e39236eccd5, type: 3}
+  defaultEnemySprite: {fileID: 441350444273336126, guid: 1a4af00a3aeb9ed4993ba6d18391a38c, type: 3}
   rangedEnemySprite: {fileID: 0}
   tankEnemySprite: {fileID: 0}
+  meleeAttackSprite: {fileID: 1174364732938193593, guid: 95f3abd423b6cac4380626142e71299a, type: 3}
+  meleeAttackColor: {r: 1, g: 1, b: 1, a: 1}
+  showMeleeVisual: 1
   isGoodDream: 1
   defaultSpawnIdleTime: 1.25
 --- !u!114 &1077092286
@@ -1387,9 +1390,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751ebc857bf125f4892496610da76d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  goodDreamTime: 0
+  goodDreamTime: 26
   badDreamTime: 26
-  countDownTime: 3
+  countDownTime: 1
   countDownText: {fileID: 411347953}
   sliderTransform: {fileID: 559872011}
   sliderImgage: {fileID: 559872012}
