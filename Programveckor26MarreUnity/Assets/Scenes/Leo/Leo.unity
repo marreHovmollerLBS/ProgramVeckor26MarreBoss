@@ -11987,7 +11987,7 @@ MonoBehaviour:
   meleeAttack: {fileID: 11400000, guid: 08a8f40eb636a2f469fc019512388786, type: 2}
   rangedAttack: {fileID: 0}
   aoeAttack: {fileID: 0}
-  playerSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
+  playerSprite: {fileID: 4565712808963722855, guid: 13af2e9d9acdb0d458a2797c43d6b447, type: 3}
   defaultEnemySprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   rangedEnemySprite: {fileID: 0}
   tankEnemySprite: {fileID: 0}
@@ -12570,7 +12570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1276840512
 Transform:
   m_ObjectHideFlags: 0
@@ -21001,7 +21001,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1563670177
 Transform:
   m_ObjectHideFlags: 0
@@ -21055,7 +21055,25 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1563670180}
+    m_ColliderPaths:
+    - - X: 200161280
+        Y: 130161288
+      - X: -200161280
+        Y: 130161288
+      - X: -200161280
+        Y: -130161288
+      - X: 200161280
+        Y: -130161288
+    - - X: -185645168
+        Y: -116290320
+      - X: -185645168
+        Y: 116290320
+      - X: 185645168
+        Y: 116290320
+      - X: 185645168
+        Y: -116290320
   m_CompositePaths:
     m_Paths:
     - - {x: 20.0161, y: -13.016129}
