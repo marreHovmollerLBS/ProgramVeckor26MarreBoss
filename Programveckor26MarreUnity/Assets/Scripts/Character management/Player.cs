@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class Player : Character
     [SerializeField] private string horizontalAxis = "Horizontal";
     [SerializeField] private string verticalAxis = "Vertical";
     [SerializeField] private KeyCode attackKey = KeyCode.Mouse0;
+
+    private List<Upgrade> upgrades = new();
     
     protected override void Awake()
     {
@@ -82,6 +85,16 @@ public class Player : Character
         if (spriteRenderer != null)
         {
             spriteRenderer.sprite = sprite;
+        }
+    }
+    /// <summary>
+    /// Changes the player's stats (and possibly abilities) depending on unlocked upgrades
+    /// </summary>
+    public void ApplyUpgrades()
+    {
+        foreach (var upg in upgrades)
+        {
+            upg.ApplyUpgrade(this);
         }
     }
 }
