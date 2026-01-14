@@ -45,7 +45,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         manager = GetComponent<CharacterManager>();
+
+
         exitScript = GetComponent<ExitScript>();
+       
 
         // Spawn player
         Player player = manager.SpawnPlayer(Vector3.zero, speed: 4f, health: 100f, damage: 10f, size: 0.5f);
@@ -68,12 +71,20 @@ public class GameManager : MonoBehaviour
         currentTime += Time.deltaTime;
         if (isGoodDream)
         {
-            exitScript.IsGoodDream = true;
+            if (exitScript != null)
+            {
+                exitScript.IsGoodDream = true;
+            }
 
             sliderTransform.localScale = new Vector2(currentTime / goodDreamTime, sliderTransform.localScale.y);
             if (currentTime >= goodDreamTime)
             {
-                exitScript.OnSwitchToBadDream();
+
+                if (exitScript != null)
+                {
+                    exitScript.OnSwitchToBadDream();
+                }
+
                 isGoodDream = false;
                 currentTime = 0;
                 sliderImgage.color = Color.red;
@@ -88,7 +99,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            exitScript.IsGoodDream = false;
+
+            if (exitScript != null)
+            {
+                exitScript.IsGoodDream = false;
+            }
 
             sliderTransform.localScale = new Vector2(currentTime / badDreamTime, sliderTransform.localScale.y);
             if (currentTime >= badDreamTime)
