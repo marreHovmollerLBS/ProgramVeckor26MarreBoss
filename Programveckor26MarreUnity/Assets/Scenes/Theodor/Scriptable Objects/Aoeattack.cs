@@ -7,7 +7,7 @@ using UnityEngine;
 public class AOEAttack : AttackType
 {
     [SerializeField] private float aoeRadius = 3f;
-    [SerializeField] private float knockbackForce = 4f;
+    [SerializeField] private float knockbackForce = 12f;
 
     protected override void PerformAttack(Character attacker, Character target)
     {
@@ -15,15 +15,19 @@ public class AOEAttack : AttackType
 
         foreach (Collider2D hit in hits)
         {
-            Character character = hit.GetComponent<Character>();
-            if (character != null && character != attacker)
+            // Only damage the player
+            if (hit.CompareTag("Player"))
             {
-                float finalDamage = attacker.Damage * damageMultiplier;
+                Character character = hit.GetComponent<Character>();
+                if (character != null && character != attacker)
+                {
+                    float finalDamage = attacker.Damage * damageMultiplier;
 
-                // Calculate knockback direction from AOE center
-                Vector2 knockbackDir = (character.transform.position - target.transform.position).normalized;
+                    // Calculate knockback direction from AOE center
+                    Vector2 knockbackDir = (character.transform.position - target.transform.position).normalized;
 
-                character.TakeDamage(finalDamage, knockbackDir * knockbackForce);
+                    character.TakeDamage(finalDamage, knockbackDir * knockbackForce);
+                }
             }
         }
 

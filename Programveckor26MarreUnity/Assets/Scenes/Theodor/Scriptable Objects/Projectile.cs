@@ -46,12 +46,16 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Character target = collision.GetComponent<Character>();
-        if (target != null && target != owner)
+        // Only damage the player
+        if (collision.CompareTag("Player"))
         {
-            // Apply knockback in the direction the projectile was traveling
-            target.TakeDamage(damage, direction * knockbackForce);
-            Destroy(gameObject);
+            Character target = collision.GetComponent<Character>();
+            if (target != null && target != owner)
+            {
+                // Apply knockback in the direction the projectile was traveling
+                target.TakeDamage(damage, direction * knockbackForce);
+                Destroy(gameObject);
+            }
         }
     }
 }

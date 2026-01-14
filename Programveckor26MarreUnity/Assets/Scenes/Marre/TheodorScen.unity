@@ -1364,11 +1364,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterManager
   playerPrefab: {fileID: 0}
   defaultEnemyPrefab: {fileID: 0}
+  rangedEnemyPrefab: {fileID: 0}
+  tankEnemyPrefab: {fileID: 0}
   meleeAttack: {fileID: 11400000, guid: 08a8f40eb636a2f469fc019512388786, type: 2}
   rangedAttack: {fileID: 0}
   aoeAttack: {fileID: 0}
   playerSprite: {fileID: 7482667652216324306, guid: 8b05041fe552ba942867f28ad2e8d229, type: 3}
   defaultEnemySprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  rangedEnemySprite: {fileID: 0}
+  tankEnemySprite: {fileID: 0}
   isGoodDream: 1
   defaultSpawnIdleTime: 1.25
 --- !u!114 &1077092286
@@ -1385,7 +1389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   goodDreamTime: 0
   badDreamTime: 26
-  countDownTime: 1
+  countDownTime: 3
   countDownText: {fileID: 411347953}
   sliderTransform: {fileID: 559872011}
   sliderImgage: {fileID: 559872012}
@@ -1430,8 +1434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1707043afd61a4e429f61baf2342bd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  SwitchActivated: 0
-  SwitchAllowed: 0
+  IsGoodDream: 0
+  Text: {fileID: 0}
 --- !u!1 &1123228674
 GameObject:
   m_ObjectHideFlags: 0

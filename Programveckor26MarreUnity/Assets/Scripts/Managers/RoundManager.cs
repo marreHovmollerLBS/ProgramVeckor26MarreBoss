@@ -24,6 +24,4 @@ public enum EnemyType
 public class RoundManager : MonoBehaviour
 {
     public List<Round> rounds = new List<Round>();
-
-    private int currentRoundIndex = 0;
 }

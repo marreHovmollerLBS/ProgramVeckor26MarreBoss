@@ -13,7 +13,7 @@ public abstract class Enemy : Character
     [Header("Combat Settings")]
     [SerializeField] protected bool usesAttackState = false; // Whether this enemy uses attack state or collision damage
     [SerializeField] protected float collisionDamageCooldown = 1f; // Cooldown for collision damage
-    [SerializeField] protected float collisionKnockbackForce = 5f;
+    [SerializeField] protected float collisionKnockbackForce = 10f;
 
     [Header("Spawn Settings")]
     [SerializeField] protected float idleSpawnTime = 1f; // Time enemy is idle after spawning
@@ -113,14 +113,17 @@ public abstract class Enemy : Character
             // Only use attack state if this enemy type uses it
             if (usesAttackState && distanceToTarget <= attackDistance)
             {
-                // Attack state behavior
-                currentState = EnemyState.Attack;
-                moveDirection = Vector2.zero;
-
-                if (Time.time >= nextAttackTime && attackType != null)
+                // Attack state behavior - only attack the player
+                if (target.CompareTag("Player"))
                 {
-                    Attack(target);
-                    nextAttackTime = Time.time + attackType.AttackCooldown;
+                    currentState = EnemyState.Attack;
+                    moveDirection = Vector2.zero;
+
+                    if (Time.time >= nextAttackTime && attackType != null)
+                    {
+                        Attack(target);
+                        nextAttackTime = Time.time + attackType.AttackCooldown;
+                    }
                 }
             }
             else
@@ -155,21 +158,25 @@ public abstract class Enemy : Character
         // Only deal collision damage if not using attack state
         if (!usesAttackState && !isSpawning && !isGoodDream)
         {
-            Character target = collision.gameObject.GetComponent<Character>();
-
-            // Check if it's the player (or another valid target) and cooldown is ready
-            if (target != null && target != this && Time.time >= nextCollisionDamageTime)
+            // Check if collision is with the player specifically
+            if (collision.gameObject.CompareTag("Player"))
             {
-                // Calculate knockback direction (away from this enemy)
-                Vector2 knockbackDir = (target.transform.position - transform.position).normalized;
+                Character target = collision.gameObject.GetComponent<Character>();
 
-                // Deal damage with knockback
-                target.TakeDamage(damage, knockbackDir * collisionKnockbackForce);
+                // Check if cooldown is ready
+                if (target != null && Time.time >= nextCollisionDamageTime)
+                {
+                    // Calculate knockback direction (away from this enemy)
+                    Vector2 knockbackDir = (target.transform.position - transform.position).normalized;
 
-                // Set next damage time
-                nextCollisionDamageTime = Time.time + collisionDamageCooldown;
+                    // Deal damage with knockback
+                    target.TakeDamage(damage, knockbackDir * collisionKnockbackForce);
 
-                Debug.Log($"{gameObject.name} dealt {damage} collision damage to {target.name}!");
+                    // Set next damage time
+                    nextCollisionDamageTime = Time.time + collisionDamageCooldown;
+
+                    Debug.Log($"{gameObject.name} dealt {damage} collision damage to {target.name}!");
+                }
             }
         }
     }

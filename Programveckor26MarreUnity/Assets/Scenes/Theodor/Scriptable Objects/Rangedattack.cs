@@ -8,7 +8,7 @@ public class RangedAttack : AttackType
 {
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 10f;
-    [SerializeField] private float knockbackForce = 3f;
+    [SerializeField] private float knockbackForce = 8f;
 
     protected override void PerformAttack(Character attacker, Character target)
     {

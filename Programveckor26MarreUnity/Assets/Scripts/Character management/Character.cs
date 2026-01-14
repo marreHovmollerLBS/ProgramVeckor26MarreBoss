@@ -16,7 +16,10 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected AttackType attackType;
 
     [Header("Knockback Settings")]
-    [SerializeField] protected float knockbackForce = 5f;
+    [SerializeField] protected float knockbackForce = 7.5f;
+    [SerializeField] protected float knockbackDuration = 0.1f; // How long knockback lasts
+
+    protected bool isKnockedBack = false;
 
     [Header("Dream State")]
     [SerializeField] protected bool isGoodDream = true;
@@ -101,9 +104,14 @@ public abstract class Character : MonoBehaviour
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0f; // 2D top-down
-            rb.freezeRotation = true;
         }
+
+        // Configure for top-down 2D with knockback support
+        rb.gravityScale = 0f; // 2D top-down
+        rb.freezeRotation = true;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.linearDamping = 0f; // No drag - important for knockback
+        rb.angularDamping = 0f;
 
         // Get or add SpriteRenderer
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -140,7 +148,8 @@ public abstract class Character : MonoBehaviour
     /// </summary>
     protected virtual void Move()
     {
-        if (rb != null)
+        // Don't move if being knocked back
+        if (rb != null && !isKnockedBack)
         {
             rb.linearVelocity = moveDirection.normalized * movementSpeed;
         }
@@ -157,13 +166,42 @@ public abstract class Character : MonoBehaviour
         // Apply knockback
         if (rb != null && knockbackDirection != Vector2.zero)
         {
-            rb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode2D.Impulse);
+            StartCoroutine(ApplyKnockback(knockbackDirection));
         }
 
         if (currentHealth <= 0)
         {
             Die();
         }
+    }
+
+    /// <summary>
+    /// Coroutine to handle knockback with duration
+    /// </summary>
+    protected virtual System.Collections.IEnumerator ApplyKnockback(Vector2 direction)
+    {
+        isKnockedBack = true;
+
+        // Apply the impulse force
+        rb.linearVelocity = Vector2.zero; // Clear current velocity
+        rb.AddForce(direction.normalized * knockbackForce, ForceMode2D.Impulse);
+
+        // Wait for knockback duration
+        yield return new WaitForSeconds(knockbackDuration);
+
+        // Gradually slow down
+        float elapsed = 0f;
+        float slowdownTime = 0.1f;
+        Vector2 startVelocity = rb.linearVelocity;
+
+        while (elapsed < slowdownTime)
+        {
+            elapsed += Time.deltaTime;
+            rb.linearVelocity = Vector2.Lerp(startVelocity, Vector2.zero, elapsed / slowdownTime);
+            yield return null;
+        }
+
+        isKnockedBack = false;
     }
 
     /// <summary>
