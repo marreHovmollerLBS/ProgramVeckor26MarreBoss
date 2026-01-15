@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> doors = new List<GameObject>();
 
+    [Header("Tileset")]
+    public GameObject GrassWater;
+    public GameObject Lava;
+
     private void Start()
     {
         manager = GetComponent<CharacterManager>();
@@ -50,6 +54,10 @@ public class GameManager : MonoBehaviour
         // Set initial dream state from RoundManager
         isGoodDream = roundManager.startWithGoodDream;
         manager.SetDreamState(isGoodDream);
+
+        // Activate correct tileset at start
+        GrassWater.SetActive(isGoodDream);
+        Lava.SetActive(!isGoodDream);
 
         // Set initial UI based on starting dream state
         if (!isGoodDream)
@@ -86,7 +94,6 @@ public class GameManager : MonoBehaviour
             sliderTransform.localScale = new Vector2(currentTime / goodDreamTime, sliderTransform.localScale.y);
             if (currentTime >= goodDreamTime)
             {
-
                 if (exitScript != null)
                 {
                     exitScript.OnSwitchToBadDream();
@@ -99,6 +106,10 @@ public class GameManager : MonoBehaviour
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
 
+                // Switch tileset
+                GrassWater.SetActive(false);
+                Lava.SetActive(true);
+
                 //Play Evil Music
                 goodDreamMusic.Stop();
                 badDreamMusic.Play();
@@ -106,7 +117,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
             if (exitScript != null)
             {
                 exitScript.IsGoodDream = false;
@@ -121,6 +131,10 @@ public class GameManager : MonoBehaviour
                 dreamCount++;
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
+
+                // Switch tileset
+                GrassWater.SetActive(true);
+                Lava.SetActive(false);
 
                 //Play Good Music
                 badDreamMusic.Stop();
@@ -166,15 +180,12 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"Enemy Type: {enemyData.enemyType}, Count: {enemyData.spawnCount}");
 
-            // Get the predetermined door indices for this spawn count
             int[] doorIndices = spawnPatterns.GetDoorIndices(enemyData.spawnCount);
 
-            //Spawn Specific Enemy at predetermined doors
             for (int i = 0; i < enemyData.spawnCount && i < doorIndices.Length; i++)
             {
                 int doorIndex = doorIndices[i];
 
-                // Safety check
                 if (doorIndex < 0 || doorIndex >= doors.Count)
                 {
                     Debug.LogError($"Door index {doorIndex} is out of range! You have {doors.Count} doors.");
