@@ -3,7 +3,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
-/// Player character class with integrated attack system
+/// Player character class with integrated attack and movement systems
 /// </summary>
 public class Player : Character
 {
@@ -21,6 +21,11 @@ public class Player : Character
     private PlayerShootAttack shootAttack;
     private PlayerGroundSlamAttack groundSlamAttack;
     private PlayerBombAttack bombAttack;
+
+    [Header("Player Health Bar")]
+    private PlayerHealthBar playerHealthBar;
+
+    public PlayerHealthBar PlayerHealthBarComponent => playerHealthBar;
 
     private List<Upgrade> upgrades = new();
 
@@ -145,8 +150,13 @@ public class Player : Character
     {
         base.Die();
         Debug.Log("Player has died! Game Over!");
+
+        if (playerHealthBar != null)
+        {
+            playerHealthBar.gameObject.SetActive(false);
+        }
+
         // Implement game over logic
-        // You can add a death screen, restart level, etc.
     }
 
     protected override void OnDreamStateChanged()
@@ -187,6 +197,15 @@ public class Player : Character
         foreach (var upg in upgrades)
         {
             upg.ApplyUpgrade(this);
+        }
+    }
+
+    public void SetPlayerHealthBar(PlayerHealthBar healthBar)
+    {
+        playerHealthBar = healthBar;
+        if (playerHealthBar != null)
+        {
+            playerHealthBar.Initialize(this);
         }
     }
 

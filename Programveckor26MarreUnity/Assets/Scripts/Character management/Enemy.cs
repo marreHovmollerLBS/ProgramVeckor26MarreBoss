@@ -221,6 +221,12 @@ public abstract class Enemy : Character
 
     protected override void Die()
     {
+        // Clean up health bar
+        if (floatingHealthBar != null)
+        {
+            Destroy(floatingHealthBar.gameObject);
+        }
+
         base.Die();
         Destroy(gameObject);
     }
