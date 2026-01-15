@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b35dffaf753ea498bef0cd68ebeb20, type: 3}
   m_Name: test2
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
-  icon: {fileID: -1372128417663514401, guid: 71cdb721059edfd4bb7a60f3ba64f2be, type: 3}
+  icon: {fileID: 3345364946253056787, guid: 139ed582e7f3a094e9d4c74d14794fb0, type: 3}
   title: 87
+  cost: 0
+  isBossUpgrade: 0
   description: "kl\xF6"

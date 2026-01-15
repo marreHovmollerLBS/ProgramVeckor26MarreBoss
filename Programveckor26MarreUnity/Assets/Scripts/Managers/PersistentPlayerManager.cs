@@ -1,18 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeManager : MonoBehaviour
+public class PersistentPlayerManager : MonoBehaviour
 {
-    public static UpgradeManager Instance;
+    public static PersistentPlayerManager Instance;
 
     /// <summary>
     /// Uppgraderingar spelaren fått mellan världar, behålls mellan scenbyten
     /// </summary>
     public List<Upgrade> acquiredUpgrades = new();
+    /// <summary>
+    /// Ju högre nivå desto svårare blir det
+    /// </summary>
+    public int chaosLevel;
+    public int coins;
+    public int bossCoins;
 
     private void Awake()
     {
-        // Se till att det bara finns en instans av UpgradeManager
+        // Se till att det bara finns en instans
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);

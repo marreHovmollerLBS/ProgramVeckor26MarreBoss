@@ -27,8 +27,6 @@ public class Player : Character
 
     public PlayerHealthBar PlayerHealthBarComponent => playerHealthBar;
 
-    private List<Upgrade> upgrades = new();
-
     protected override void Awake()
     {
         base.Awake();
@@ -190,11 +188,11 @@ public class Player : Character
     }
 
     /// <summary>
-    /// Changes the player's stats (and possibly abilities) depending on unlocked upgrades
+    /// Changes the player's stats and abilities depending on unlocked upgrades
     /// </summary>
     public void ApplyUpgrades()
     {
-        foreach (var upg in upgrades)
+        foreach (Upgrade upg in PersistentPlayerManager.Instance.acquiredUpgrades)
         {
             upg.ApplyUpgrade(this);
         }

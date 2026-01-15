@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b35dffaf753ea498bef0cd68ebeb20, type: 3}
   m_Name: test3
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
-  icon: {fileID: 7027679652737589784, guid: 29125aac92157a44e9fdfc479abcbcad, type: 3}
+  icon: {fileID: 8364614791704551999, guid: 479a889ea253dd74e8ffbc79070a3d24, type: 3}
   title: hkl
+  cost: 0
+  isBossUpgrade: 0
   description: hfkf

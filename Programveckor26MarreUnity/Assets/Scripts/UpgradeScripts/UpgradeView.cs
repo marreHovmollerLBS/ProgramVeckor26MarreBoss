@@ -15,6 +15,12 @@ public class UpgradeView : MonoBehaviour,
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI descriptionText;
 
+    [SerializeField] private Image coinIcon;
+    [SerializeField] private TextMeshProUGUI costText;
+
+    [SerializeField] private Sprite normalUpgradeIcon;
+    [SerializeField] private Sprite bossUpgradeIcon;
+
     private Upgrade upgrade;
 
     private void Awake()
@@ -28,8 +34,20 @@ public class UpgradeView : MonoBehaviour,
         iconImage.sprite = upgrade.icon;
         titleText.text = upgrade.title;
         descriptionText.text = upgrade.description;
+        costText.text = upgrade.cost.ToString();
+        SetIcon();
     }
-
+    private void SetIcon()
+    {
+        if (upgrade.isBossUpgrade)
+        {
+            coinIcon.sprite = bossUpgradeIcon;
+        }
+        else
+        {
+            coinIcon.sprite = normalUpgradeIcon;
+        }
+    }
     public Upgrade GetUpgrade()
     {
         return upgrade;
@@ -49,7 +67,7 @@ public class UpgradeView : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        UpgradeManager.Instance.AddUpgrade(upgrade);
+        PersistentPlayerManager.Instance.AddUpgrade(upgrade);
         Debug.Log($"Selected {upgrade.title}");
         Destroy(gameObject);
     }
