@@ -59,6 +59,29 @@ public class CharacterManager : MonoBehaviour
     [Header("Enemy Spawn Settings")]
     [SerializeField] private float defaultSpawnIdleTime = 1f;
 
+    [Header("Health Bar Settings")]
+    [SerializeField] private bool createHealthBars = true;
+
+    [Header("Enemy Health Bar Settings")]
+    [SerializeField] private Vector2 enemyHealthBarSize = new Vector2(1f, 0.1f);
+    [SerializeField] private Vector3 enemyHealthBarOffset = new Vector3(0, 0.8f, 0);
+    [SerializeField] private Vector2 bossHealthBarSize = new Vector2(2f, 0.2f);
+    [SerializeField] private Vector3 bossHealthBarOffset = new Vector3(0, 1.5f, 0);
+    [SerializeField] private Color enemyHealthBarBackground = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+    [SerializeField] private Color enemyHealthBarFill = new Color(0f, 1f, 0f, 1f);
+    [SerializeField] private Color enemyHealthBarLowHealth = new Color(1f, 0f, 0f, 1f);
+    [SerializeField] private float enemyHealthBarDisplayDuration = 5f;
+
+    [Header("Player Health Bar Settings")]
+    [SerializeField] private Vector2 playerHealthBarSize = new Vector2(300f, 40f);
+    [SerializeField] private Vector2 playerHealthBarPosition = new Vector2(20f, -20f);
+    [SerializeField] private Color playerHealthBarBackground = new Color(0.2f, 0.2f, 0.2f, 0.9f);
+    [SerializeField] private Color playerHealthBarFill = new Color(0f, 1f, 0f, 1f);
+    [SerializeField] private Color playerHealthBarLowHealth = new Color(1f, 0f, 0f, 1f);
+    [SerializeField] private bool showPlayerHealthText = true;
+
+    private PlayerHealthBar activePlayerHealthBar;
+
     /// <summary>
     /// Spawn and initialize a player character
     /// </summary>
@@ -95,6 +118,11 @@ public class CharacterManager : MonoBehaviour
 
         // Configure all attack visuals
         ConfigurePlayerAttackVisuals(player);
+
+        if (createHealthBars)
+        {
+            CreatePlayerHealthBar(player);
+        }
 
         Debug.Log($"Player spawned at {position}");
         return player;
@@ -234,6 +262,11 @@ public class CharacterManager : MonoBehaviour
             defaultEnemy.SetSprite(defaultEnemySprite);
         }
 
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(defaultEnemy, false);
+        }
+
         Debug.Log($"Default Enemy spawned at {position} with {idleTime}s spawn idle time (collision damage mode)");
         return defaultEnemy;
     }
@@ -261,6 +294,11 @@ public class CharacterManager : MonoBehaviour
             healEnemy.SetSprite(healEnemySprite);
         }
 
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(healEnemy, false);
+        }
+
         Debug.Log($"Heal Enemy spawned at {position} with {idleTime}s spawn idle time");
         return healEnemy;
     }
@@ -286,6 +324,11 @@ public class CharacterManager : MonoBehaviour
         if (rangedEnemySprite != null)
         {
             rangedEnemy.SetSprite(rangedEnemySprite);
+        }
+
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(rangedEnemy, false);
         }
 
         Debug.Log($"Ranged Enemy spawned at {position} with {idleTime}s spawn idle time (attack state mode)");
@@ -316,6 +359,11 @@ public class CharacterManager : MonoBehaviour
             tankEnemy.SetSprite(tankEnemySprite);
         }
 
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(tankEnemy, false);
+        }
+
         Debug.Log($"Tank Enemy spawned at {position} with {idleTime}s spawn idle time (attack state mode)");
         return tankEnemy;
     }
@@ -344,6 +392,11 @@ public class CharacterManager : MonoBehaviour
             boss.SetSprite(evilFatherSprite);
         }
 
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(boss, true); // true = boss health bar
+        }
+
         Debug.Log($"BOSS: Evil Father spawned at {position} with {idleTime}s spawn idle time");
         return boss;
     }
@@ -351,7 +404,7 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// Spawn and initialize The Mare boss
     /// </summary>
-    public TheMare SpawnTheMare(Vector3 position, float speed = 3f, float health = 500f, float damage = 30f, float size = 1.2f, float spawnIdleTime = -1f)
+    public TheMare SpawnTheMare(Vector3 position, float speed = 3f, float health = 200f, float damage = 5f, float size = 1.2f, float spawnIdleTime = -1f)
     {
         GameObject bossObj = CreateEnemyObject(theMarePrefab, position, "The Mare");
         bossObj.transform.localScale = Vector3.one * size;
@@ -370,6 +423,11 @@ public class CharacterManager : MonoBehaviour
         if (theMareSprite != null)
         {
             boss.SetSprite(theMareSprite);
+        }
+
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(boss, true); // true = boss health bar
         }
 
         Debug.Log($"BOSS: The Mare spawned at {position} with {idleTime}s spawn idle time");
@@ -398,6 +456,11 @@ public class CharacterManager : MonoBehaviour
         if (theDevilSprite != null)
         {
             boss.SetSprite(theDevilSprite);
+        }
+
+        if (createHealthBars)
+        {
+            CreateEnemyHealthBar(boss, true); // true = boss health bar
         }
 
         Debug.Log($"BOSS: The Devil spawned at {position} with {idleTime}s spawn idle time");
@@ -451,6 +514,58 @@ public class CharacterManager : MonoBehaviour
     public void SetDefaultSpawnIdleTime(float time)
     {
         defaultSpawnIdleTime = time;
+    }
+
+    /// <summary>
+    /// Create a floating health bar for an enemy
+    /// </summary>
+    private FloatingHealthBar CreateEnemyHealthBar(Enemy enemy, bool isBoss = false)
+    {
+        if (!createHealthBars) return null;
+
+        GameObject healthBarObj = new GameObject($"{enemy.name}_HealthBar");
+        FloatingHealthBar healthBar = healthBarObj.AddComponent<FloatingHealthBar>();
+
+        // Use boss or regular enemy settings
+        Vector2 barSize = isBoss ? bossHealthBarSize : enemyHealthBarSize;
+        Vector3 barOffset = isBoss ? bossHealthBarOffset : enemyHealthBarOffset;
+
+        healthBar.Initialize(enemy, barSize, barOffset);
+        healthBar.SetColors(enemyHealthBarBackground, enemyHealthBarFill, enemyHealthBarLowHealth);
+        healthBar.SetDisplayDuration(enemyHealthBarDisplayDuration);
+
+        enemy.SetHealthBar(healthBar);
+
+        return healthBar;
+    }
+
+    /// <summary>
+    /// Create static health bar for player
+    /// </summary>
+    private PlayerHealthBar CreatePlayerHealthBar(Player player)
+    {
+        if (!createHealthBars) return null;
+
+        // Destroy old health bar if it exists
+        if (activePlayerHealthBar != null)
+        {
+            Destroy(activePlayerHealthBar.gameObject);
+        }
+
+        GameObject healthBarObj = new GameObject("PlayerHealthBar");
+        DontDestroyOnLoad(healthBarObj); // Keep health bar between scenes
+
+        PlayerHealthBar healthBar = healthBarObj.AddComponent<PlayerHealthBar>();
+        healthBar.Initialize(player);
+        healthBar.SetPosition(playerHealthBarPosition);
+        healthBar.SetSize(playerHealthBarSize);
+        healthBar.SetColors(playerHealthBarBackground, playerHealthBarFill, playerHealthBarLowHealth);
+        healthBar.SetShowHealthText(showPlayerHealthText);
+
+        player.SetPlayerHealthBar(healthBar);
+        activePlayerHealthBar = healthBar;
+
+        return healthBar;
     }
 
     #region Melee Attack Setters
@@ -525,6 +640,127 @@ public class CharacterManager : MonoBehaviour
     public void SetShootTowardsMouse(bool towardsMouse)
     {
         shootTowardsMouse = towardsMouse;
+    }
+
+    #endregion
+
+    #region Health Bar Configuration Methods
+
+    /// <summary>
+    /// Enable or disable health bar creation
+    /// </summary>
+    public void SetCreateHealthBars(bool create)
+    {
+        createHealthBars = create;
+    }
+
+    /// <summary>
+    /// Set enemy health bar size
+    /// </summary>
+    public void SetEnemyHealthBarSize(Vector2 size)
+    {
+        enemyHealthBarSize = size;
+    }
+
+    /// <summary>
+    /// Set boss health bar size
+    /// </summary>
+    public void SetBossHealthBarSize(Vector2 size)
+    {
+        bossHealthBarSize = size;
+    }
+
+    /// <summary>
+    /// Set enemy health bar offset
+    /// </summary>
+    public void SetEnemyHealthBarOffset(Vector3 offset)
+    {
+        enemyHealthBarOffset = offset;
+    }
+
+    /// <summary>
+    /// Set boss health bar offset
+    /// </summary>
+    public void SetBossHealthBarOffset(Vector3 offset)
+    {
+        bossHealthBarOffset = offset;
+    }
+
+    /// <summary>
+    /// Set enemy health bar colors
+    /// </summary>
+    public void SetEnemyHealthBarColors(Color background, Color fill, Color lowHealth)
+    {
+        enemyHealthBarBackground = background;
+        enemyHealthBarFill = fill;
+        enemyHealthBarLowHealth = lowHealth;
+    }
+
+    /// <summary>
+    /// Set enemy health bar display duration
+    /// </summary>
+    public void SetEnemyHealthBarDisplayDuration(float duration)
+    {
+        enemyHealthBarDisplayDuration = duration;
+    }
+
+    /// <summary>
+    /// Set player health bar size
+    /// </summary>
+    public void SetPlayerHealthBarSize(Vector2 size)
+    {
+        playerHealthBarSize = size;
+        if (activePlayerHealthBar != null)
+        {
+            activePlayerHealthBar.SetSize(size);
+        }
+    }
+
+    /// <summary>
+    /// Set player health bar position
+    /// </summary>
+    public void SetPlayerHealthBarPosition(Vector2 position)
+    {
+        playerHealthBarPosition = position;
+        if (activePlayerHealthBar != null)
+        {
+            activePlayerHealthBar.SetPosition(position);
+        }
+    }
+
+    /// <summary>
+    /// Set player health bar colors
+    /// </summary>
+    public void SetPlayerHealthBarColors(Color background, Color fill, Color lowHealth)
+    {
+        playerHealthBarBackground = background;
+        playerHealthBarFill = fill;
+        playerHealthBarLowHealth = lowHealth;
+
+        if (activePlayerHealthBar != null)
+        {
+            activePlayerHealthBar.SetColors(background, fill, lowHealth);
+        }
+    }
+
+    /// <summary>
+    /// Toggle player health text display
+    /// </summary>
+    public void SetShowPlayerHealthText(bool show)
+    {
+        showPlayerHealthText = show;
+        if (activePlayerHealthBar != null)
+        {
+            activePlayerHealthBar.SetShowHealthText(show);
+        }
+    }
+
+    /// <summary>
+    /// Get the active player health bar
+    /// </summary>
+    public PlayerHealthBar GetActivePlayerHealthBar()
+    {
+        return activePlayerHealthBar;
     }
 
     #endregion
