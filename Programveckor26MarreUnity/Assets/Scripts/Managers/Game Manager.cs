@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int badDreamTime;
     [SerializeField] private int countDownTime;
 
-    private float currentTime = 0;
+    public float currentTime = 0;
     private int startTime;
 
     [Header("Ui")]
@@ -45,10 +45,17 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         manager = GetComponent<CharacterManager>();
-
-
         exitScript = GetComponent<ExitScript>();
-       
+
+        // Set initial dream state from RoundManager
+        isGoodDream = roundManager.startWithGoodDream;
+        manager.SetDreamState(isGoodDream);
+
+        // Set initial UI based on starting dream state
+        if (!isGoodDream)
+        {
+            sliderImgage.color = Color.red;
+        }
 
         // Spawn player
         Player player = manager.SpawnPlayer(Vector3.zero, speed: 4f, health: 100f, damage: 10f, size: 0.5f);
@@ -128,11 +135,25 @@ public class GameManager : MonoBehaviour
         countDownText.text = (countDownTime - startTime).ToString();
         if (startTime >= countDownTime)
         {
-            //Start Music after start timer
-            goodDreamMusic.Play();
+            //Start Music after start timer based on initial dream state
+            if (isGoodDream)
+            {
+                goodDreamMusic.Play();
+            }
+            else
+            {
+                badDreamMusic.Play();
+            }
 
             countDownText.text = "";
             isGameActive = true;
+
+            // Notify exit script that game is active
+            if (exitScript != null)
+            {
+                exitScript.IsGameActive = true;
+            }
+
             SpawnEnemies();
         }
     }

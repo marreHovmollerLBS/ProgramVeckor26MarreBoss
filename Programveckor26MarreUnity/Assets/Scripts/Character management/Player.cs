@@ -12,9 +12,9 @@ public class Player : Character
     [SerializeField] private string verticalAxis = "Vertical";
 
     [Header("Attack Input")]
-    [SerializeField] private KeyCode meleeAttackKey = KeyCode.Mouse0;
-    [SerializeField] private KeyCode groundSlamKey = KeyCode.V;
-    [SerializeField] private KeyCode bombKey = KeyCode.C;
+    [SerializeField] private KeyCode meleeAttackKey = KeyCode.V;
+    [SerializeField] private KeyCode groundSlamKey = KeyCode.C;
+    [SerializeField] private KeyCode bombKey = KeyCode.B;
 
     [Header("Attack Components")]
     private PlayerMeleeAttack meleeAttack;
@@ -73,6 +73,7 @@ public class Player : Character
     protected override void HandleBehavior()
     {
         HandleInput();
+        HandleRotation();
         HandleAttacks();
     }
 
@@ -88,11 +89,24 @@ public class Player : Character
     }
 
     /// <summary>
+    /// Handle player rotation based on movement direction
+    /// </summary>
+    private void HandleRotation()
+    {
+        if (moveDirection.magnitude > 0.01f)
+        {
+            float angle = Mathf.Atan2(moveDirection.x, -moveDirection.y) * Mathf.Rad2Deg;
+
+            // Apply rotation to the player
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+    }
+
+    /// <summary>
     /// Handle all attack inputs
     /// </summary>
     private void HandleAttacks()
     {
-        // Melee attack (left mouse button) - always fires melee, also fires shoot if unlocked
         if (Input.GetKeyDown(meleeAttackKey))
         {
             // Perform melee attack
@@ -108,7 +122,7 @@ public class Player : Character
             }
         }
 
-        // Ground slam attack (V key)
+        // Ground slam
         if (Input.GetKeyDown(groundSlamKey))
         {
             if (groundSlamAttack != null)
@@ -117,7 +131,7 @@ public class Player : Character
             }
         }
 
-        // Bomb attack (C key)
+        // Bomb
         if (Input.GetKeyDown(bombKey))
         {
             if (bombAttack != null)

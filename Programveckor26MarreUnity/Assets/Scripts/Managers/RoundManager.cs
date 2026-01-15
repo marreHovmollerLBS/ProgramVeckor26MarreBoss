@@ -23,5 +23,10 @@ public enum EnemyType
 
 public class RoundManager : MonoBehaviour
 {
+    [Header("Dream Settings")]
+    [Tooltip("If true, the game starts with a good dream. If false, starts with a bad dream.")]
+    public bool startWithGoodDream = true;
+
+    [Header("Rounds")]
     public List<Round> rounds = new List<Round>();
 }

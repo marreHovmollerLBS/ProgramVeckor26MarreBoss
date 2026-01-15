@@ -53,11 +53,14 @@ MonoBehaviour:
   damage: 10
   size: 0.5
   attackType: {fileID: 11400000, guid: 08a8f40eb636a2f469fc019512388786, type: 2}
-  knockbackForce: 5
+  knockbackForce: 10
+  knockbackDuration: 0.06
   isGoodDream: 1
   horizontalAxis: Horizontal
   verticalAxis: Vertical
-  attackKey: 323
+  meleeAttackKey: 118
+  groundSlamKey: 99
+  bombKey: 98
 --- !u!50 &6576316884049523593
 Rigidbody2D:
   serializedVersion: 5
@@ -84,7 +87,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!212 &2441121648263168793
 SpriteRenderer:
   m_ObjectHideFlags: 0

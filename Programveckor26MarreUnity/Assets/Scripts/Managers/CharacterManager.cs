@@ -2,7 +2,6 @@ using UnityEngine;
 
 /// <summary>
 /// Manager class to spawn and configure characters from external scripts
-/// Updated to support player attack visuals
 /// </summary>
 public class CharacterManager : MonoBehaviour
 {
@@ -23,10 +22,15 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private Sprite rangedEnemySprite;
     [SerializeField] private Sprite tankEnemySprite;
 
-    [Header("Player Attack Visuals (Optional)")]
-    [SerializeField] private Sprite meleeAttackSprite; // Sprite for melee attack hitbox visual
+    [Header("Player Attack Animation")]
+    [SerializeField] private Sprite[] meleeAttackAnimationFrames; // Array of sprites for frame-by-frame animation
+    [SerializeField] private float meleeAnimationFrameRate = 24f; // Frames per second for animation
     [SerializeField] private Color meleeAttackColor = new Color(1f, 0f, 0f, 0.3f);
     [SerializeField] private bool showMeleeVisual = true;
+
+    [Header("Attack Animation Aspect Ratio")]
+    [Tooltip("Aspect ratio of the attack animation sprites (width:height). E.g., (1, 2) means sprite is 1 unit wide and 2 units tall")]
+    [SerializeField] private Vector2 meleeAttackAspectRatio = new Vector2(1f, 1f);
 
     [Header("Dream State")]
     [SerializeField] private bool isGoodDream = true;
@@ -85,10 +89,16 @@ public class CharacterManager : MonoBehaviour
 
         if (meleeAttackComponent != null)
         {
-            // Set the melee attack sprite if provided
-            if (meleeAttackSprite != null)
+            // Set animation frames
+            if (meleeAttackAnimationFrames != null && meleeAttackAnimationFrames.Length > 0)
             {
-                meleeAttackComponent.SetHitboxSprite(meleeAttackSprite);
+                meleeAttackComponent.SetAnimationFrames(meleeAttackAnimationFrames);
+                meleeAttackComponent.SetFrameRate(meleeAnimationFrameRate);
+                Debug.Log($"Player melee attack animation configured: {meleeAttackAnimationFrames.Length} frames at {meleeAnimationFrameRate} fps");
+            }
+            else
+            {
+                Debug.LogWarning("No melee attack animation frames assigned in CharacterManager!");
             }
 
             // Set the visual color
@@ -97,7 +107,10 @@ public class CharacterManager : MonoBehaviour
             // Set whether to show visual
             meleeAttackComponent.SetShowVisual(showMeleeVisual);
 
-            Debug.Log($"Player melee attack visuals configured: Sprite={meleeAttackSprite != null}, Color={meleeAttackColor}, Show={showMeleeVisual}");
+            // Set the aspect ratio
+            meleeAttackComponent.SetSpriteAspectRatio(meleeAttackAspectRatio);
+
+            Debug.Log($"Player melee attack visuals configured: Animation Frames={meleeAttackAnimationFrames?.Length ?? 0}, Color={meleeAttackColor}, Show={showMeleeVisual}, AspectRatio={meleeAttackAspectRatio}");
         }
     }
 
@@ -241,18 +254,34 @@ public class CharacterManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the melee attack sprite at runtime
-    /// </summary>
-    public void SetMeleeAttackSprite(Sprite sprite)
-    {
-        meleeAttackSprite = sprite;
-    }
-
-    /// <summary>
     /// Set the melee attack color at runtime
     /// </summary>
     public void SetMeleeAttackColor(Color color)
     {
         meleeAttackColor = color;
+    }
+
+    /// <summary>
+    /// Set the melee attack animation frames at runtime
+    /// </summary>
+    public void SetMeleeAttackAnimationFrames(Sprite[] frames)
+    {
+        meleeAttackAnimationFrames = frames;
+    }
+
+    /// <summary>
+    /// Set the melee attack animation frame rate at runtime
+    /// </summary>
+    public void SetMeleeAnimationFrameRate(float frameRate)
+    {
+        meleeAnimationFrameRate = frameRate;
+    }
+
+    /// <summary>
+    /// Set the melee attack aspect ratio at runtime
+    /// </summary>
+    public void SetMeleeAttackAspectRatio(Vector2 aspectRatio)
+    {
+        meleeAttackAspectRatio = aspectRatio;
     }
 }
