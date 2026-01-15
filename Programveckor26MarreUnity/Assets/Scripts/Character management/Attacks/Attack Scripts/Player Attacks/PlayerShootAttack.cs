@@ -16,9 +16,15 @@ public class PlayerShootAttack : MonoBehaviour
     [SerializeField] private float projectileSize = 0.3f;
     [SerializeField] private Color projectileColor = Color.yellow;
 
+    [Header("Projectile Sprite")]
+    [SerializeField] private Sprite projectileSprite;
+
+    [Header("Attack Direction")]
+    [SerializeField] private bool attackTowardsMouse = false; // If true, attack towards mouse. If false, attack in player's facing direction
+
     private Player player;
     private float lastShootTime = -999f;
-    private bool isUnlocked = false;
+    private bool isUnlocked = true;
 
     private void Awake()
     {
@@ -56,10 +62,8 @@ public class PlayerShootAttack : MonoBehaviour
     {
         lastShootTime = Time.time;
 
-        // Get shoot direction based on mouse position
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        Vector2 direction = (mousePos - transform.position).normalized;
+        // Get shoot direction based on setting
+        Vector2 direction = GetShootDirection();
 
         // Create projectile
         GameObject projectileObj = new GameObject("PlayerProjectile");
@@ -68,10 +72,25 @@ public class PlayerShootAttack : MonoBehaviour
 
         // Add visual
         SpriteRenderer sr = projectileObj.AddComponent<SpriteRenderer>();
-        sr.sprite = CreateCircleSprite();
         sr.color = projectileColor;
         sr.sortingOrder = 50;
+
+        // Use provided sprite or create circle sprite
+        if (projectileSprite != null)
+        {
+            sr.sprite = projectileSprite;
+        }
+        else
+        {
+            sr.sprite = CreateCircleSprite();
+        }
+
+        // No aspect ratio correction - always 1:1
         projectileObj.transform.localScale = Vector3.one * projectileSize;
+
+        // Rotate projectile to face direction of travel
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        projectileObj.transform.rotation = Quaternion.Euler(0, 0, angle);
 
         // Add collider
         CircleCollider2D collider = projectileObj.AddComponent<CircleCollider2D>();
@@ -87,6 +106,33 @@ public class PlayerShootAttack : MonoBehaviour
         proj.Initialize(projectileDamage, knockbackForce, projectileLifetime);
 
         Debug.Log($"Fired projectile in direction {direction}");
+    }
+
+    /// <summary>
+    /// Get the direction the projectile should travel
+    /// </summary>
+    private Vector2 GetShootDirection()
+    {
+        if (attackTowardsMouse)
+        {
+            // Get mouse position in world space
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+
+            // Calculate direction from player to mouse
+            Vector2 direction = (mousePos - transform.position).normalized;
+            return direction;
+        }
+        else
+        {
+            // Use player's current facing direction (rotation)
+            float angle = transform.rotation.eulerAngles.z;
+            Vector2 direction = new Vector2(
+                Mathf.Sin(angle * Mathf.Deg2Rad),
+                -Mathf.Cos(angle * Mathf.Deg2Rad)
+            );
+            return direction.normalized;
+        }
     }
 
     /// <summary>
@@ -134,6 +180,8 @@ public class PlayerShootAttack : MonoBehaviour
     public void SetDamage(float damage) => projectileDamage = damage;
     public void SetSpeed(float speed) => projectileSpeed = speed;
     public void SetKnockback(float knockback) => knockbackForce = knockback;
+    public void SetProjectileSprite(Sprite sprite) => projectileSprite = sprite;
+    public void SetAttackTowardsMouse(bool towardsMouse) => attackTowardsMouse = towardsMouse;
 }
 
 /// <summary>
@@ -170,7 +218,7 @@ public class PlayerProjectile : MonoBehaviour
                 enemy.TakeDamage(damage, knockbackDir * knockbackForce);
 
                 Debug.Log($"Projectile hit {enemy.name} for {damage} damage!");
-                
+
                 // Projectile pierces through - doesn't get destroyed on hit
             }
         }

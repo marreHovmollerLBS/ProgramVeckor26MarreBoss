@@ -7,8 +7,8 @@ using UnityEngine;
 public class PlayerGroundSlamAttack : MonoBehaviour
 {
     [Header("Ground Slam Settings")]
-    [SerializeField] private float slamDamage = 30f;
-    [SerializeField] private float slamRadius = 3f;
+    [SerializeField] private float slamDamage = 8f;
+    [SerializeField] private float slamRadius = 1.5f;
     [SerializeField] private float slamCooldown = 3f;
     [SerializeField] private float knockbackForce = 15f;
     [SerializeField] private float slamDuration = 0.3f;
@@ -17,12 +17,16 @@ public class PlayerGroundSlamAttack : MonoBehaviour
     [SerializeField] private Color slamColor = new Color(1f, 0.5f, 0f, 0.4f);
     [SerializeField] private bool showSlamEffect = true;
 
+    [Header("Slam Animation")]
+    [SerializeField] private Sprite[] slamAnimationFrames;
+    [SerializeField] private float slamAnimationFrameRate = 24f;
+
     [Header("Animation Settings")]
     [SerializeField] private float expandSpeed = 10f; // How fast the visual expands
 
     private Player player;
     private float lastSlamTime = -999f;
-    private bool isUnlocked = false;
+    private bool isUnlocked = true;
     private bool isSlaming = false;
 
     private void Awake()
@@ -92,13 +96,16 @@ public class PlayerGroundSlamAttack : MonoBehaviour
             }
         }
 
-        // Wait for slam duration
-        yield return new WaitForSeconds(slamDuration);
-
-        // Destroy visual effect
-        if (slamEffect != null)
+        // Wait for slam duration (only if using fallback visual)
+        if (slamAnimationFrames == null || slamAnimationFrames.Length == 0)
         {
-            Destroy(slamEffect);
+            yield return new WaitForSeconds(slamDuration);
+
+            // Destroy visual effect
+            if (slamEffect != null)
+            {
+                Destroy(slamEffect);
+            }
         }
 
         isSlaming = false;
@@ -113,18 +120,42 @@ public class PlayerGroundSlamAttack : MonoBehaviour
         effectObj.transform.position = transform.position;
         effectObj.layer = LayerMask.NameToLayer("Default");
 
-        // Add sprite renderer
+        // Add sprite renderer with pure white color, alpha 1
         SpriteRenderer sr = effectObj.AddComponent<SpriteRenderer>();
-        sr.sprite = CreateCircleSprite();
-        sr.color = slamColor;
+        sr.color = Color.white; // Pure white with alpha 1
         sr.sortingOrder = 10;
 
-        // Start small and expand
-        effectObj.transform.localScale = Vector3.zero;
-        
-        // Add expanding animation
-        GroundSlamEffect effect = effectObj.AddComponent<GroundSlamEffect>();
-        effect.Initialize(slamRadius, slamDuration, expandSpeed);
+        // Add circle collider - ALWAYS radius 1, scale is handled by transform
+        CircleCollider2D collider = effectObj.AddComponent<CircleCollider2D>();
+        collider.radius = 1f;
+        collider.isTrigger = true;
+
+        // If we have animation frames, use them
+        if (slamAnimationFrames != null && slamAnimationFrames.Length > 0)
+        {
+            sr.sprite = slamAnimationFrames[0];
+
+            // Add animator component that will destroy the object when done
+            GroundSlamAnimator animator = effectObj.AddComponent<GroundSlamAnimator>();
+            animator.Initialize(slamAnimationFrames, slamAnimationFrameRate);
+
+            // No aspect ratio correction - always 1:1
+            effectObj.transform.localScale = Vector3.one * slamRadius;
+
+            Debug.Log($"Ground slam created with {slamAnimationFrames.Length} frames, radius: {slamRadius}, scale: {effectObj.transform.localScale}");
+        }
+        else
+        {
+            // Fallback to circle sprite at full size (no expansion)
+            sr.sprite = CreateCircleSprite();
+
+            // No aspect ratio correction - always 1:1
+            effectObj.transform.localScale = Vector3.one * slamRadius;
+
+            // Add simple timed destruction
+            GroundSlamEffect effect = effectObj.AddComponent<GroundSlamEffect>();
+            effect.Initialize(slamRadius, slamDuration, expandSpeed);
+        }
 
         return effectObj;
     }
@@ -174,6 +205,8 @@ public class PlayerGroundSlamAttack : MonoBehaviour
     public void SetDamage(float damage) => slamDamage = damage;
     public void SetRadius(float radius) => slamRadius = radius;
     public void SetKnockback(float knockback) => knockbackForce = knockback;
+    public void SetSlamAnimationFrames(Sprite[] frames) => slamAnimationFrames = frames;
+    public void SetSlamAnimationFrameRate(float rate) => slamAnimationFrameRate = rate;
 
     private void OnDrawGizmosSelected()
     {
@@ -184,38 +217,80 @@ public class PlayerGroundSlamAttack : MonoBehaviour
 }
 
 /// <summary>
-/// Component to handle the expanding visual effect
+/// Component to handle the expanding visual effect (fallback when no animation)
 /// </summary>
 public class GroundSlamEffect : MonoBehaviour
 {
-    private float targetScale;
     private float duration;
-    private float expandSpeed;
     private float elapsedTime;
 
     public void Initialize(float target, float dur, float speed)
     {
-        targetScale = target * 2f; // Multiply by 2 for diameter
         duration = dur;
-        expandSpeed = speed;
         elapsedTime = 0f;
+
+        // Already scaled by parent, no need to scale here
     }
 
     private void Update()
     {
         elapsedTime += Time.deltaTime;
 
-        // Expand to target size
-        float scale = Mathf.Lerp(0f, targetScale, elapsedTime * expandSpeed / duration);
-        transform.localScale = new Vector3(scale, scale, 1f);
-
-        // Fade out towards the end
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
+        // Destroy after duration
+        if (elapsedTime >= duration)
         {
-            Color color = sr.color;
-            color.a = Mathf.Lerp(color.a, 0f, elapsedTime / duration);
-            sr.color = color;
+            Destroy(gameObject);
+        }
+    }
+}
+
+/// <summary>
+/// Component to handle ground slam animation
+/// </summary>
+public class GroundSlamAnimator : MonoBehaviour
+{
+    private Sprite[] frames;
+    private float frameRate;
+    private int currentFrame = 0;
+    private float timer = 0f;
+    private SpriteRenderer spriteRenderer;
+    private bool animationComplete = false;
+
+    public void Initialize(Sprite[] animFrames, float fps)
+    {
+        frames = animFrames;
+        frameRate = fps;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (frames != null && frames.Length > 0 && spriteRenderer != null)
+        {
+            spriteRenderer.sprite = frames[0];
+        }
+    }
+
+    private void Update()
+    {
+        if (frames == null || frames.Length == 0 || spriteRenderer == null || animationComplete)
+            return;
+
+        timer += Time.deltaTime;
+        float frameTime = 1f / frameRate;
+
+        if (timer >= frameTime)
+        {
+            currentFrame++;
+
+            // Check if animation is complete
+            if (currentFrame >= frames.Length)
+            {
+                animationComplete = true;
+                // Destroy the GameObject when animation completes
+                Destroy(gameObject);
+                return;
+            }
+
+            spriteRenderer.sprite = frames[currentFrame];
+            timer = 0f;
         }
     }
 }
