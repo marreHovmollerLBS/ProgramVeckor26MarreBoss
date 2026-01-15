@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradeDisplay : MonoBehaviour
+        
 {
     [SerializeField] private List<Upgrade> availableUpgrades;
     [SerializeField] private UpgradeView upgradeCardPrefab;
