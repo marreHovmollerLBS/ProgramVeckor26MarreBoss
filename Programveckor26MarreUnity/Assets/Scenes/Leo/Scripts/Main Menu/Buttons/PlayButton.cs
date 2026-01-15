@@ -6,7 +6,7 @@ public class PlayButton : MonoBehaviour
 {
     public void LoadMainScene()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene("Main Scene");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
