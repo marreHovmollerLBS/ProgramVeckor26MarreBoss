@@ -6,7 +6,7 @@ public class HealthUpgrade : Upgrade
     public int Amount;
     public override void ApplyUpgrade(Player player)
     {
-        //base.ApplyUpgrade(player);
-        //player.MaxHealth += Amount;
+        base.ApplyUpgrade(player);
+        player.MaxHealth += Amount;
     }
 }

@@ -4,7 +4,7 @@ public class UnlockBomb : Upgrade
 {
     public override void ApplyUpgrade(Player player)
     {
-        //base.ApplyUpgrade();
-        //player.UnlockBombAttack();
+        base.ApplyUpgrade(player);
+        player.UnlockBombAttack();
     }
 }

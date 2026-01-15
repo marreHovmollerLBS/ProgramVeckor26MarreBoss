@@ -174,6 +174,7 @@ public class Player : Character
         damage = dmg;
         attackType = attack;
         isGoodDream = goodDream;
+        ApplyUpgrades();
     }
 
     /// <summary>
