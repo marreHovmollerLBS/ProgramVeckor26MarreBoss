@@ -7,8 +7,8 @@ using UnityEngine;
 public class PlayerBombAttack : MonoBehaviour
 {
     [Header("Bomb Settings")]
-    [SerializeField] private float damage = 30f;
-    [SerializeField] private float explosionRadius = 4f;
+    [SerializeField] private float damage = 10f;
+    [SerializeField] private float explosionRadius = 2f;
     [SerializeField] private float bombTimer = 2f;
     [SerializeField] private float attackCooldown = 5f;
     [SerializeField] private float knockbackForce = 20f;
@@ -19,8 +19,16 @@ public class PlayerBombAttack : MonoBehaviour
     [SerializeField] private float bombSize = 0.5f;
     [SerializeField] private bool showVisualEffect = true;
 
+    [Header("Bomb Animation")]
+    [SerializeField] private Sprite[] bombAnimationFrames;
+    [SerializeField] private float bombAnimationFrameRate = 12f;
+
+    [Header("Explosion Animation")]
+    [SerializeField] private Sprite[] explosionAnimationFrames;
+    [SerializeField] private float explosionAnimationFrameRate = 24f;
+
     [Header("Unlock Settings")]
-    [SerializeField] private bool isUnlocked = false;
+    [SerializeField] private bool isUnlocked = true;
 
     private float lastAttackTime;
     private Player player;
@@ -30,9 +38,6 @@ public class PlayerBombAttack : MonoBehaviour
         player = GetComponent<Player>();
     }
 
-    /// <summary>
-    /// Attempt to place a bomb
-    /// </summary>
     public bool TryAttack()
     {
         if (!isUnlocked)
@@ -50,49 +55,46 @@ public class PlayerBombAttack : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// Place a bomb at the player's current position
-    /// </summary>
     private void PlaceBomb()
     {
         GameObject bomb = new GameObject("PlayerBomb");
         bomb.transform.position = transform.position;
 
-        // Add bomb component
         Bomb bombComponent = bomb.AddComponent<Bomb>();
-        bombComponent.Initialize(damage, explosionRadius, bombTimer, knockbackForce, bombColor, explosionColor, bombSize, showVisualEffect);
+        bombComponent.Initialize(
+            damage,
+            explosionRadius,
+            bombTimer,
+            knockbackForce,
+            bombColor,
+            explosionColor,
+            bombSize,
+            showVisualEffect,
+            bombAnimationFrames,
+            bombAnimationFrameRate,
+            explosionAnimationFrames,
+            explosionAnimationFrameRate
+        );
 
         Debug.Log($"Bomb placed! Will explode in {bombTimer} seconds.");
     }
 
-    /// <summary>
-    /// Unlock this attack
-    /// </summary>
     public void Unlock()
     {
         isUnlocked = true;
         Debug.Log("Bomb attack unlocked!");
     }
 
-    /// <summary>
-    /// Check if this attack is unlocked
-    /// </summary>
     public bool IsUnlocked()
     {
         return isUnlocked;
     }
 
-    /// <summary>
-    /// Check if attack is ready
-    /// </summary>
     public bool IsReady()
     {
         return isUnlocked && Time.time - lastAttackTime >= attackCooldown;
     }
 
-    /// <summary>
-    /// Get cooldown remaining
-    /// </summary>
     public float GetCooldownRemaining()
     {
         return Mathf.Max(0, attackCooldown - (Time.time - lastAttackTime));
@@ -104,11 +106,12 @@ public class PlayerBombAttack : MonoBehaviour
     public void SetBombTimer(float newTimer) => bombTimer = newTimer;
     public void SetAttackCooldown(float newCooldown) => attackCooldown = newCooldown;
     public void SetKnockbackForce(float newForce) => knockbackForce = newForce;
+    public void SetBombAnimationFrames(Sprite[] frames) => bombAnimationFrames = frames;
+    public void SetBombAnimationFrameRate(float rate) => bombAnimationFrameRate = rate;
+    public void SetExplosionAnimationFrames(Sprite[] frames) => explosionAnimationFrames = frames;
+    public void SetExplosionAnimationFrameRate(float rate) => explosionAnimationFrameRate = rate;
 }
 
-/// <summary>
-/// Bomb component that counts down and explodes
-/// </summary>
 public class Bomb : MonoBehaviour
 {
     private float damage;
@@ -119,11 +122,27 @@ public class Bomb : MonoBehaviour
     private Color explosionColor;
     private float bombSize;
     private bool showVisual;
+    private Sprite[] bombFrames;
+    private float bombFrameRate;
+    private Sprite[] explosionFrames;
+    private float explosionFrameRate;
 
     private SpriteRenderer spriteRenderer;
     private float originalTimer;
 
-    public void Initialize(float dmg, float radius, float time, float knockback, Color bColor, Color eColor, float size, bool visual)
+    public void Initialize(
+        float dmg,
+        float radius,
+        float time,
+        float knockback,
+        Color bColor,
+        Color eColor,
+        float size,
+        bool visual,
+        Sprite[] bFrames,
+        float bFrameRate,
+        Sprite[] eFrames,
+        float eFrameRate)
     {
         damage = dmg;
         explosionRadius = radius;
@@ -134,6 +153,10 @@ public class Bomb : MonoBehaviour
         explosionColor = eColor;
         bombSize = size;
         showVisual = visual;
+        bombFrames = bFrames;
+        bombFrameRate = bFrameRate;
+        explosionFrames = eFrames;
+        explosionFrameRate = eFrameRate;
 
         if (showVisual)
         {
@@ -141,39 +164,47 @@ public class Bomb : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Create visual representation of the bomb
-    /// </summary>
     private void CreateBombVisual()
     {
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.color = bombColor;
         spriteRenderer.sortingOrder = 20;
 
-        // Create circle sprite
-        Texture2D texture = new Texture2D(64, 64);
-        Vector2 center = new Vector2(32, 32);
-
-        for (int y = 0; y < 64; y++)
+        if (bombFrames != null && bombFrames.Length > 0)
         {
-            for (int x = 0; x < 64; x++)
-            {
-                Vector2 point = new Vector2(x, y);
-                float distance = Vector2.Distance(point, center);
+            spriteRenderer.sprite = bombFrames[0];
 
-                if (distance <= 32)
+            BombAnimator animator = gameObject.AddComponent<BombAnimator>();
+            animator.Initialize(bombFrames, bombFrameRate, true);
+        }
+        else
+        {
+            Texture2D texture = new Texture2D(64, 64);
+            Vector2 center = new Vector2(32, 32);
+
+            for (int y = 0; y < 64; y++)
+            {
+                for (int x = 0; x < 64; x++)
                 {
-                    texture.SetPixel(x, y, Color.white);
-                }
-                else
-                {
-                    texture.SetPixel(x, y, Color.clear);
+                    Vector2 point = new Vector2(x, y);
+                    float distance = Vector2.Distance(point, center);
+
+                    if (distance <= 32)
+                    {
+                        texture.SetPixel(x, y, Color.white);
+                    }
+                    else
+                    {
+                        texture.SetPixel(x, y, Color.clear);
+                    }
                 }
             }
-        }
-        texture.Apply();
+            texture.Apply();
 
-        spriteRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f));
+            spriteRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, 64, 64), new Vector2(0.5f, 0.5f));
+        }
+
+        // No aspect ratio correction needed - always 1:1
         transform.localScale = Vector3.one * bombSize;
     }
 
@@ -181,39 +212,31 @@ public class Bomb : MonoBehaviour
     {
         timer -= Time.deltaTime;
 
-        // Pulse effect
-        if (showVisual && spriteRenderer != null)
+        if (showVisual && spriteRenderer != null && (bombFrames == null || bombFrames.Length == 0))
         {
             float pulse = Mathf.PingPong(Time.time * 5f, 0.3f);
             transform.localScale = Vector3.one * (bombSize + pulse);
 
-            // Flash faster as timer runs out
             float flashSpeed = Mathf.Lerp(2f, 10f, 1f - (timer / originalTimer));
             float flash = Mathf.PingPong(Time.time * flashSpeed, 1f);
             spriteRenderer.color = Color.Lerp(bombColor, Color.white, flash);
         }
 
-        // Explode when timer reaches zero
         if (timer <= 0)
         {
             Explode();
         }
     }
 
-    /// <summary>
-    /// Trigger the explosion
-    /// </summary>
     private void Explode()
     {
         Debug.Log($"Bomb exploded at {transform.position}!");
 
-        // Create explosion visual
         if (showVisual)
         {
-            StartCoroutine(CreateExplosionEffect());
+            CreateExplosionEffect();
         }
 
-        // Detect all enemies in explosion radius
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 
         foreach (Collider2D hit in hits)
@@ -223,98 +246,139 @@ public class Bomb : MonoBehaviour
                 Enemy enemy = hit.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    // Calculate knockback direction (away from explosion center)
                     Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
-
-                    // Deal damage with knockback
                     enemy.TakeDamage(damage, knockbackDir * knockbackForce);
-
                     Debug.Log($"Bomb explosion hit {enemy.name} for {damage} damage!");
                 }
             }
         }
 
-        // Destroy the bomb object after explosion effect starts
-        Destroy(gameObject, 0.5f);
+        Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Create explosion visual effect
-    /// </summary>
-    private IEnumerator CreateExplosionEffect()
+    private void CreateExplosionEffect()
     {
         GameObject explosion = new GameObject("Explosion");
         explosion.transform.position = transform.position;
 
         SpriteRenderer sr = explosion.AddComponent<SpriteRenderer>();
-        sr.color = explosionColor;
+        sr.color = Color.white;
         sr.sortingOrder = 25;
 
-        // Create explosion sprite
-        Texture2D texture = new Texture2D(128, 128);
-        Vector2 center = new Vector2(64, 64);
+        CircleCollider2D collider = explosion.AddComponent<CircleCollider2D>();
+        collider.radius = 1f;
+        collider.isTrigger = true;
 
-        for (int y = 0; y < 128; y++)
+        if (explosionFrames != null && explosionFrames.Length > 0)
         {
-            for (int x = 0; x < 128; x++)
-            {
-                Vector2 point = new Vector2(x, y);
-                float distance = Vector2.Distance(point, center);
+            sr.sprite = explosionFrames[0];
 
-                if (distance <= 64)
+            BombAnimator animator = explosion.AddComponent<BombAnimator>();
+            animator.Initialize(explosionFrames, explosionFrameRate, false);
+
+            // No aspect ratio correction - always 1:1
+            explosion.transform.localScale = Vector3.one * explosionRadius;
+
+            Debug.Log($"Explosion created with {explosionFrames.Length} frames, radius: {explosionRadius}, scale: {explosion.transform.localScale}");
+        }
+        else
+        {
+            Texture2D texture = new Texture2D(128, 128);
+            Vector2 center = new Vector2(64, 64);
+
+            for (int y = 0; y < 128; y++)
+            {
+                for (int x = 0; x < 128; x++)
                 {
-                    // Create gradient
-                    float alpha = 1f - (distance / 64f);
-                    Color pixelColor = explosionColor;
-                    pixelColor.a = alpha * explosionColor.a;
-                    texture.SetPixel(x, y, pixelColor);
-                }
-                else
-                {
-                    texture.SetPixel(x, y, Color.clear);
+                    Vector2 point = new Vector2(x, y);
+                    float distance = Vector2.Distance(point, center);
+
+                    if (distance <= 64)
+                    {
+                        texture.SetPixel(x, y, Color.white);
+                    }
+                    else
+                    {
+                        texture.SetPixel(x, y, Color.clear);
+                    }
                 }
             }
+            texture.Apply();
+
+            sr.sprite = Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
+
+            // No aspect ratio correction - always 1:1
+            explosion.transform.localScale = Vector3.one * explosionRadius;
+
+            Destroy(explosion, 0.4f);
         }
-        texture.Apply();
-
-        sr.sprite = Sprite.Create(texture, new Rect(0, 0, 128, 128), new Vector2(0.5f, 0.5f));
-
-        // Animate explosion
-        float duration = 0.4f;
-        float elapsed = 0f;
-        Vector3 startScale = Vector3.zero;
-        Vector3 endScale = Vector3.one * (explosionRadius * 2f / 1.28f);
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-
-            explosion.transform.localScale = Vector3.Lerp(startScale, endScale, t);
-
-            // Fade out
-            Color color = sr.color;
-            color.a = explosionColor.a * (1f - t);
-            sr.color = color;
-
-            yield return null;
-        }
-
-        Destroy(explosion);
     }
 
     private void OnDrawGizmos()
     {
-        // Show explosion radius
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
         Gizmos.DrawWireSphere(transform.position, explosionRadius);
 
-        // Show timer countdown
         if (Application.isPlaying)
         {
             Gizmos.color = Color.yellow;
             float timerPercent = timer / originalTimer;
             Gizmos.DrawWireSphere(transform.position, explosionRadius * timerPercent);
+        }
+    }
+}
+
+public class BombAnimator : MonoBehaviour
+{
+    private Sprite[] frames;
+    private float frameRate;
+    private bool loop;
+    private int currentFrame = 0;
+    private float timer = 0f;
+    private SpriteRenderer spriteRenderer;
+    private bool animationComplete = false;
+
+    public void Initialize(Sprite[] animFrames, float fps, bool shouldLoop)
+    {
+        frames = animFrames;
+        frameRate = fps;
+        loop = shouldLoop;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (frames != null && frames.Length > 0 && spriteRenderer != null)
+        {
+            spriteRenderer.sprite = frames[0];
+        }
+    }
+
+    private void Update()
+    {
+        if (frames == null || frames.Length == 0 || spriteRenderer == null || animationComplete)
+            return;
+
+        timer += Time.deltaTime;
+        float frameTime = 1f / frameRate;
+
+        if (timer >= frameTime)
+        {
+            currentFrame++;
+
+            if (currentFrame >= frames.Length)
+            {
+                if (loop)
+                {
+                    currentFrame = 0;
+                }
+                else
+                {
+                    animationComplete = true;
+                    Destroy(gameObject);
+                    return;
+                }
+            }
+
+            spriteRenderer.sprite = frames[currentFrame];
+            timer = 0f;
         }
     }
 }

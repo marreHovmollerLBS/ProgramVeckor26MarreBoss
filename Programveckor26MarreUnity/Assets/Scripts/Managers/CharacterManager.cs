@@ -22,21 +22,34 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private Sprite rangedEnemySprite;
     [SerializeField] private Sprite tankEnemySprite;
 
-    [Header("Player Attack Animation")]
-    [SerializeField] private Sprite[] meleeAttackAnimationFrames; // Array of sprites for frame-by-frame animation
-    [SerializeField] private float meleeAnimationFrameRate = 24f; // Frames per second for animation
+    [Header("Player Melee Attack Animation")]
+    [SerializeField] private Sprite[] meleeAttackAnimationFrames;
+    [SerializeField] private float meleeAnimationFrameRate = 24f;
     [SerializeField] private Color meleeAttackColor = new Color(1f, 0f, 0f, 0.3f);
     [SerializeField] private bool showMeleeVisual = true;
-
-    [Header("Attack Animation Aspect Ratio")]
-    [Tooltip("Aspect ratio of the attack animation sprites (width:height). E.g., (1, 2) means sprite is 1 unit wide and 2 units tall")]
     [SerializeField] private Vector2 meleeAttackAspectRatio = new Vector2(1f, 1f);
+
+    [Header("Player Bomb Animation")]
+    [SerializeField] private Sprite[] bombAnimationFrames;
+    [SerializeField] private float bombAnimationFrameRate = 12f;
+
+    [Header("Player Explosion Animation")]
+    [SerializeField] private Sprite[] explosionAnimationFrames;
+    [SerializeField] private float explosionAnimationFrameRate = 24f;
+
+    [Header("Player Ground Slam Animation")]
+    [SerializeField] private Sprite[] groundSlamAnimationFrames;
+    [SerializeField] private float groundSlamAnimationFrameRate = 24f;
+
+    [Header("Player Shoot Projectile")]
+    [SerializeField] private Sprite projectileSprite;
+    [SerializeField] private bool shootTowardsMouse = false;
 
     [Header("Dream State")]
     [SerializeField] private bool isGoodDream = true;
 
     [Header("Enemy Spawn Settings")]
-    [SerializeField] private float defaultSpawnIdleTime = 1f; // Default idle time for all enemies
+    [SerializeField] private float defaultSpawnIdleTime = 1f;
 
     /// <summary>
     /// Spawn and initialize a player character
@@ -72,7 +85,7 @@ public class CharacterManager : MonoBehaviour
             player.SetSprite(playerSprite);
         }
 
-        // Configure melee attack visuals
+        // Configure all attack visuals
         ConfigurePlayerAttackVisuals(player);
 
         Debug.Log($"Player spawned at {position}");
@@ -80,37 +93,112 @@ public class CharacterManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Configure player attack visual settings
+    /// Configure all player attack visual settings
     /// </summary>
     private void ConfigurePlayerAttackVisuals(Player player)
     {
-        // Get the melee attack component
+        // Configure melee attack
+        ConfigureMeleeAttack(player);
+
+        // Configure bomb attack
+        ConfigureBombAttack(player);
+
+        // Configure ground slam attack
+        ConfigureGroundSlamAttack(player);
+
+        // Configure shoot attack
+        ConfigureShootAttack(player);
+    }
+
+    /// <summary>
+    /// Configure melee attack visuals
+    /// </summary>
+    private void ConfigureMeleeAttack(Player player)
+    {
         PlayerMeleeAttack meleeAttackComponent = player.GetMeleeAttack();
 
         if (meleeAttackComponent != null)
         {
-            // Set animation frames
             if (meleeAttackAnimationFrames != null && meleeAttackAnimationFrames.Length > 0)
             {
                 meleeAttackComponent.SetAnimationFrames(meleeAttackAnimationFrames);
                 meleeAttackComponent.SetFrameRate(meleeAnimationFrameRate);
                 Debug.Log($"Player melee attack animation configured: {meleeAttackAnimationFrames.Length} frames at {meleeAnimationFrameRate} fps");
             }
-            else
-            {
-                Debug.LogWarning("No melee attack animation frames assigned in CharacterManager!");
-            }
 
-            // Set the visual color
             meleeAttackComponent.SetHitboxColor(meleeAttackColor);
-
-            // Set whether to show visual
             meleeAttackComponent.SetShowVisual(showMeleeVisual);
-
-            // Set the aspect ratio
             meleeAttackComponent.SetSpriteAspectRatio(meleeAttackAspectRatio);
 
             Debug.Log($"Player melee attack visuals configured: Animation Frames={meleeAttackAnimationFrames?.Length ?? 0}, Color={meleeAttackColor}, Show={showMeleeVisual}, AspectRatio={meleeAttackAspectRatio}");
+        }
+    }
+
+    /// <summary>
+    /// Configure bomb attack visuals
+    /// </summary>
+    private void ConfigureBombAttack(Player player)
+    {
+        PlayerBombAttack bombAttackComponent = player.GetBombAttack();
+
+        if (bombAttackComponent != null)
+        {
+            if (bombAnimationFrames != null && bombAnimationFrames.Length > 0)
+            {
+                bombAttackComponent.SetBombAnimationFrames(bombAnimationFrames);
+                bombAttackComponent.SetBombAnimationFrameRate(bombAnimationFrameRate);
+                Debug.Log($"Player bomb animation configured: {bombAnimationFrames.Length} frames at {bombAnimationFrameRate} fps");
+            }
+
+            if (explosionAnimationFrames != null && explosionAnimationFrames.Length > 0)
+            {
+                bombAttackComponent.SetExplosionAnimationFrames(explosionAnimationFrames);
+                bombAttackComponent.SetExplosionAnimationFrameRate(explosionAnimationFrameRate);
+                Debug.Log($"Player explosion animation configured: {explosionAnimationFrames.Length} frames at {explosionAnimationFrameRate} fps");
+            }
+
+            Debug.Log($"Player bomb attack visuals configured: Bomb Frames={bombAnimationFrames?.Length ?? 0}, Explosion Frames={explosionAnimationFrames?.Length ?? 0}");
+        }
+    }
+
+    /// <summary>
+    /// Configure ground slam attack visuals
+    /// </summary>
+    private void ConfigureGroundSlamAttack(Player player)
+    {
+        PlayerGroundSlamAttack groundSlamComponent = player.GetGroundSlamAttack();
+
+        if (groundSlamComponent != null)
+        {
+            if (groundSlamAnimationFrames != null && groundSlamAnimationFrames.Length > 0)
+            {
+                groundSlamComponent.SetSlamAnimationFrames(groundSlamAnimationFrames);
+                groundSlamComponent.SetSlamAnimationFrameRate(groundSlamAnimationFrameRate);
+                Debug.Log($"Player ground slam animation configured: {groundSlamAnimationFrames.Length} frames at {groundSlamAnimationFrameRate} fps");
+            }
+
+            Debug.Log($"Player ground slam attack visuals configured: Animation Frames={groundSlamAnimationFrames?.Length ?? 0}");
+        }
+    }
+
+    /// <summary>
+    /// Configure shoot attack visuals
+    /// </summary>
+    private void ConfigureShootAttack(Player player)
+    {
+        PlayerShootAttack shootAttackComponent = player.GetShootAttack();
+
+        if (shootAttackComponent != null)
+        {
+            if (projectileSprite != null)
+            {
+                shootAttackComponent.SetProjectileSprite(projectileSprite);
+                Debug.Log($"Player projectile sprite configured");
+            }
+
+            shootAttackComponent.SetAttackTowardsMouse(shootTowardsMouse);
+
+            Debug.Log($"Player shoot attack visuals configured: Has Sprite={projectileSprite != null}, TowardsMouse={shootTowardsMouse}");
         }
     }
 
@@ -128,10 +216,8 @@ public class CharacterManager : MonoBehaviour
             defaultEnemy = enemyObj.AddComponent<DefaultEnemy>();
         }
 
-        // Use default spawn idle time if not specified
         float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
 
-        // Default enemies don't need an attack type, but we'll pass it for consistency
         AttackType attack = attackType ?? meleeAttack;
         defaultEnemy.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
 
@@ -158,10 +244,8 @@ public class CharacterManager : MonoBehaviour
             rangedEnemy = enemyObj.AddComponent<RangedEnemy>();
         }
 
-        // Use default spawn idle time if not specified
         float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
 
-        // Ranged enemies need ranged attack type
         rangedEnemy.InitializeEnemy(speed, health, damage, size, rangedAttack, isGoodDream, idleTime);
 
         if (rangedEnemySprite != null)
@@ -187,10 +271,8 @@ public class CharacterManager : MonoBehaviour
             tankEnemy = enemyObj.AddComponent<TankEnemy>();
         }
 
-        // Use default spawn idle time if not specified
         float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
 
-        // Tank enemies can use melee or AOE attack
         AttackType attack = aoeAttack ?? meleeAttack;
         tankEnemy.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
 
@@ -227,7 +309,6 @@ public class CharacterManager : MonoBehaviour
     {
         isGoodDream = goodDream;
 
-        // Update all existing characters
         Character[] allCharacters = FindObjectsByType<Character>(FindObjectsSortMode.None);
         foreach (Character character in allCharacters)
         {
@@ -253,35 +334,79 @@ public class CharacterManager : MonoBehaviour
         defaultSpawnIdleTime = time;
     }
 
-    /// <summary>
-    /// Set the melee attack color at runtime
-    /// </summary>
+    #region Melee Attack Setters
+
     public void SetMeleeAttackColor(Color color)
     {
         meleeAttackColor = color;
     }
 
-    /// <summary>
-    /// Set the melee attack animation frames at runtime
-    /// </summary>
     public void SetMeleeAttackAnimationFrames(Sprite[] frames)
     {
         meleeAttackAnimationFrames = frames;
     }
 
-    /// <summary>
-    /// Set the melee attack animation frame rate at runtime
-    /// </summary>
     public void SetMeleeAnimationFrameRate(float frameRate)
     {
         meleeAnimationFrameRate = frameRate;
     }
 
-    /// <summary>
-    /// Set the melee attack aspect ratio at runtime
-    /// </summary>
     public void SetMeleeAttackAspectRatio(Vector2 aspectRatio)
     {
         meleeAttackAspectRatio = aspectRatio;
     }
+
+    #endregion
+
+    #region Bomb Attack Setters
+
+    public void SetBombAnimationFrames(Sprite[] frames)
+    {
+        bombAnimationFrames = frames;
+    }
+
+    public void SetBombAnimationFrameRate(float frameRate)
+    {
+        bombAnimationFrameRate = frameRate;
+    }
+
+    public void SetExplosionAnimationFrames(Sprite[] frames)
+    {
+        explosionAnimationFrames = frames;
+    }
+
+    public void SetExplosionAnimationFrameRate(float frameRate)
+    {
+        explosionAnimationFrameRate = frameRate;
+    }
+
+    #endregion
+
+    #region Ground Slam Attack Setters
+
+    public void SetGroundSlamAnimationFrames(Sprite[] frames)
+    {
+        groundSlamAnimationFrames = frames;
+    }
+
+    public void SetGroundSlamAnimationFrameRate(float frameRate)
+    {
+        groundSlamAnimationFrameRate = frameRate;
+    }
+
+    #endregion
+
+    #region Shoot Attack Setters
+
+    public void SetProjectileSprite(Sprite sprite)
+    {
+        projectileSprite = sprite;
+    }
+
+    public void SetShootTowardsMouse(bool towardsMouse)
+    {
+        shootTowardsMouse = towardsMouse;
+    }
+
+    #endregion
 }
