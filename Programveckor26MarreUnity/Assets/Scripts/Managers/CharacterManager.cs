@@ -8,8 +8,12 @@ public class CharacterManager : MonoBehaviour
     [Header("Prefabs (Optional - will create if not assigned)")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject defaultEnemyPrefab;
+    [SerializeField] private GameObject healEnemyPrefab;
     [SerializeField] private GameObject rangedEnemyPrefab;
     [SerializeField] private GameObject tankEnemyPrefab;
+    [SerializeField] private GameObject evilFatherPrefab;
+    [SerializeField] private GameObject theMarePrefab;
+    [SerializeField] private GameObject theDevilPrefab;
 
     [Header("Attack Types")]
     [SerializeField] private AttackType meleeAttack;
@@ -19,8 +23,12 @@ public class CharacterManager : MonoBehaviour
     [Header("Sprites (Optional)")]
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private Sprite defaultEnemySprite;
+    [SerializeField] private Sprite healEnemySprite;
     [SerializeField] private Sprite rangedEnemySprite;
     [SerializeField] private Sprite tankEnemySprite;
+    [SerializeField] private Sprite evilFatherSprite;
+    [SerializeField] private Sprite theMareSprite;
+    [SerializeField] private Sprite theDevilSprite;
 
     [Header("Player Melee Attack Animation")]
     [SerializeField] private Sprite[] meleeAttackAnimationFrames;
@@ -231,6 +239,33 @@ public class CharacterManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Spawn and initialize a Heal enemy (always flees, heals player on death)
+    /// </summary>
+    public HealEnemy SpawnHealEnemy(Vector3 position, float speed = 3.5f, float health = 20f, float damage = 0f, float size = 0.4f, float spawnIdleTime = -1f)
+    {
+        GameObject enemyObj = CreateEnemyObject(healEnemyPrefab, position, "Heal Enemy");
+        enemyObj.transform.localScale = Vector3.one * size;
+
+        HealEnemy healEnemy = enemyObj.GetComponent<HealEnemy>();
+        if (healEnemy == null)
+        {
+            healEnemy = enemyObj.AddComponent<HealEnemy>();
+        }
+
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
+        healEnemy.InitializeEnemy(speed, health, damage, size, null, isGoodDream, idleTime);
+
+        if (healEnemySprite != null)
+        {
+            healEnemy.SetSprite(healEnemySprite);
+        }
+
+        Debug.Log($"Heal Enemy spawned at {position} with {idleTime}s spawn idle time");
+        return healEnemy;
+    }
+
+    /// <summary>
     /// Spawn and initialize a Ranged enemy (uses attack state)
     /// </summary>
     public RangedEnemy SpawnRangedEnemy(Vector3 position, float speed = 1.5f, float health = 30f, float damage = 12f, float size = 0.5f, float spawnIdleTime = -1f)
@@ -283,6 +318,90 @@ public class CharacterManager : MonoBehaviour
 
         Debug.Log($"Tank Enemy spawned at {position} with {idleTime}s spawn idle time (attack state mode)");
         return tankEnemy;
+    }
+
+    /// <summary>
+    /// Spawn and initialize Evil Father boss
+    /// </summary>
+    public EvilFather SpawnEvilFather(Vector3 position, float speed = 2.5f, float health = 300f, float damage = 25f, float size = 1f, float spawnIdleTime = -1f)
+    {
+        GameObject bossObj = CreateEnemyObject(evilFatherPrefab, position, "Evil Father");
+        bossObj.transform.localScale = Vector3.one * size;
+
+        EvilFather boss = bossObj.GetComponent<EvilFather>();
+        if (boss == null)
+        {
+            boss = bossObj.AddComponent<EvilFather>();
+        }
+
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
+        AttackType attack = meleeAttack ?? aoeAttack;
+        boss.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
+
+        if (evilFatherSprite != null)
+        {
+            boss.SetSprite(evilFatherSprite);
+        }
+
+        Debug.Log($"BOSS: Evil Father spawned at {position} with {idleTime}s spawn idle time");
+        return boss;
+    }
+
+    /// <summary>
+    /// Spawn and initialize The Mare boss
+    /// </summary>
+    public TheMare SpawnTheMare(Vector3 position, float speed = 3f, float health = 500f, float damage = 30f, float size = 1.2f, float spawnIdleTime = -1f)
+    {
+        GameObject bossObj = CreateEnemyObject(theMarePrefab, position, "The Mare");
+        bossObj.transform.localScale = Vector3.one * size;
+
+        TheMare boss = bossObj.GetComponent<TheMare>();
+        if (boss == null)
+        {
+            boss = bossObj.AddComponent<TheMare>();
+        }
+
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
+        AttackType attack = meleeAttack ?? aoeAttack;
+        boss.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
+
+        if (theMareSprite != null)
+        {
+            boss.SetSprite(theMareSprite);
+        }
+
+        Debug.Log($"BOSS: The Mare spawned at {position} with {idleTime}s spawn idle time");
+        return boss;
+    }
+
+    /// <summary>
+    /// Spawn and initialize The Devil boss (final boss)
+    /// </summary>
+    public TheDevil SpawnTheDevil(Vector3 position, float speed = 2f, float health = 800f, float damage = 40f, float size = 1.5f, float spawnIdleTime = -1f)
+    {
+        GameObject bossObj = CreateEnemyObject(theDevilPrefab, position, "The Devil");
+        bossObj.transform.localScale = Vector3.one * size;
+
+        TheDevil boss = bossObj.GetComponent<TheDevil>();
+        if (boss == null)
+        {
+            boss = bossObj.AddComponent<TheDevil>();
+        }
+
+        float idleTime = spawnIdleTime < 0 ? defaultSpawnIdleTime : spawnIdleTime;
+
+        AttackType attack = aoeAttack ?? meleeAttack;
+        boss.InitializeEnemy(speed, health, damage, size, attack, isGoodDream, idleTime);
+
+        if (theDevilSprite != null)
+        {
+            boss.SetSprite(theDevilSprite);
+        }
+
+        Debug.Log($"BOSS: The Devil spawned at {position} with {idleTime}s spawn idle time");
+        return boss;
     }
 
     /// <summary>

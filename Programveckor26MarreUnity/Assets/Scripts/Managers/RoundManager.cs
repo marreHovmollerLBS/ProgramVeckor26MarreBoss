@@ -12,13 +12,20 @@ public class EnemySpawnData
 public class Round
 {
     public string roundName;
+    public float duration; // Duration in seconds for this specific round
     public List<EnemySpawnData> enemies = new List<EnemySpawnData>();
 }
 
 public enum EnemyType
 {
-    BasicEnemy
-    // Add more enemy types here
+    BasicEnemy,
+    HealEnemy,
+    RangedEnemy,
+    TankEnemy,
+    // Bosses
+    EvilFather,
+    TheMare,
+    TheDevil
 }
 
 public class RoundManager : MonoBehaviour

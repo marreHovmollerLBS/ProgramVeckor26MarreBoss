@@ -15,12 +15,11 @@ public class GameManager : MonoBehaviour
     int dreamCount = 0;
 
     [Header("Timers")]
-    [SerializeField] private int goodDreamTime;
-    [SerializeField] private int badDreamTime;
     [SerializeField] private int countDownTime;
 
-    public float currentTime = 0;
+    [HideInInspector] public float currentTime = 0;
     private int startTime;
+    private float currentRoundDuration = 0; // Store the current round's duration
 
     [Header("Ui")]
     [SerializeField] private TextMeshProUGUI countDownText;
@@ -91,8 +90,8 @@ public class GameManager : MonoBehaviour
                 exitScript.IsGoodDream = true;
             }
 
-            sliderTransform.localScale = new Vector2(currentTime / goodDreamTime, sliderTransform.localScale.y);
-            if (currentTime >= goodDreamTime)
+            sliderTransform.localScale = new Vector2(currentTime / currentRoundDuration, sliderTransform.localScale.y);
+            if (currentTime >= currentRoundDuration)
             {
                 if (exitScript != null)
                 {
@@ -103,6 +102,10 @@ public class GameManager : MonoBehaviour
                 currentTime = 0;
                 sliderImgage.color = Color.red;
                 dreamCount++;
+
+                // Update the duration for the new round
+                UpdateRoundDuration();
+
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
 
@@ -122,13 +125,17 @@ public class GameManager : MonoBehaviour
                 exitScript.IsGoodDream = false;
             }
 
-            sliderTransform.localScale = new Vector2(currentTime / badDreamTime, sliderTransform.localScale.y);
-            if (currentTime >= badDreamTime)
+            sliderTransform.localScale = new Vector2(currentTime / currentRoundDuration, sliderTransform.localScale.y);
+            if (currentTime >= currentRoundDuration)
             {
                 isGoodDream = true;
                 currentTime = 0;
                 sliderImgage.color = Color.white;
                 dreamCount++;
+
+                // Update the duration for the new round
+                UpdateRoundDuration();
+
                 SpawnEnemies();
                 manager.SetDreamState(isGoodDream);
 
@@ -168,12 +175,36 @@ public class GameManager : MonoBehaviour
                 exitScript.IsGameActive = true;
             }
 
+            // Set the initial round duration
+            UpdateRoundDuration();
+
             SpawnEnemies();
+        }
+    }
+
+    void UpdateRoundDuration()
+    {
+        // Check if we have a valid round
+        if (dreamCount >= 0 && dreamCount < roundManager.rounds.Count)
+        {
+            currentRoundDuration = roundManager.rounds[dreamCount].duration;
+        }
+        else
+        {
+            Debug.LogWarning($"Dream count {dreamCount} is out of range! Using default duration of 30 seconds.");
+            currentRoundDuration = 30f; // Fallback duration
         }
     }
 
     void SpawnEnemies()
     {
+        // Check if we have a valid round
+        if (dreamCount < 0 || dreamCount >= roundManager.rounds.Count)
+        {
+            Debug.LogWarning($"Dream count {dreamCount} is out of range! No enemies to spawn.");
+            return;
+        }
+
         Round round = roundManager.rounds[dreamCount];
 
         foreach (EnemySpawnData enemyData in round.enemies)
@@ -195,9 +226,40 @@ public class GameManager : MonoBehaviour
                 Vector3 doorPos = doors[doorIndex].transform.position;
                 doorPos.z = 1;
 
-                if (enemyData.enemyType == EnemyType.BasicEnemy)
+                // Spawn appropriate enemy type
+                switch (enemyData.enemyType)
                 {
-                    manager.SpawnDefaultEnemy(doorPos);
+                    case EnemyType.BasicEnemy:
+                        manager.SpawnDefaultEnemy(doorPos);
+                        break;
+
+                    case EnemyType.HealEnemy:
+                        manager.SpawnHealEnemy(doorPos);
+                        break;
+
+                    case EnemyType.RangedEnemy:
+                        manager.SpawnRangedEnemy(doorPos);
+                        break;
+
+                    case EnemyType.TankEnemy:
+                        manager.SpawnTankEnemy(doorPos);
+                        break;
+
+                    case EnemyType.EvilFather:
+                        manager.SpawnEvilFather(doorPos);
+                        break;
+
+                    case EnemyType.TheMare:
+                        manager.SpawnTheMare(doorPos);
+                        break;
+
+                    case EnemyType.TheDevil:
+                        manager.SpawnTheDevil(doorPos);
+                        break;
+
+                    default:
+                        Debug.LogWarning($"Unknown enemy type: {enemyData.enemyType}");
+                        break;
                 }
             }
         }
