@@ -91,9 +91,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd916e07b82d29a499260854a2335698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeView
-  iconImage: {fileID: 0}
-  titleText: {fileID: 0}
-  descriptionText: {fileID: 0}
+  iconImage: {fileID: 7324039394077978231}
+  titleText: {fileID: 188926148493729659}
+  descriptionText: {fileID: 8125077054197351072}
 --- !u!1 &5310069436076910932
 GameObject:
   m_ObjectHideFlags: 0

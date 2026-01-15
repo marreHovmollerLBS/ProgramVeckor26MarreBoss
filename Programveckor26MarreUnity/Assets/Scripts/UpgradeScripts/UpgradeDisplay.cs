@@ -5,7 +5,7 @@ public class UpgradeDisplay : MonoBehaviour
 {
     [SerializeField] private List<Upgrade> availableUpgrades;
     [SerializeField] private UpgradeView upgradeCardPrefab;
-    [SerializeField] private float spacing = 3f; //Avståndet mellan korten
+    [SerializeField] private float spacing = 30f; //Avståndet mellan korten
     [SerializeField] private Transform canvasTransform;
 
     void Start()
@@ -35,7 +35,7 @@ public class UpgradeDisplay : MonoBehaviour
             UpgradeView card = Instantiate(upgradeCardPrefab, canvasTransform); // SKapa kortet som barn till canvas
             card.Init(selectedUpgrades[i]);
 
-            float xPos = (i - 1) * spacing; // -1, 0, 1
+            float xPos = (i - 1) * spacing; // placerar korten på -1, 0, 1
             card.transform.localPosition = new Vector3(xPos, 0, 0);
         }
     }
