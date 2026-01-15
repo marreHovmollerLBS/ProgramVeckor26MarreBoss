@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52d13a4e17cada44d85723cf85e6487b, type: 3}
-  m_Name: Basic Health Upgrade
+  m_Name: Health Upgrade
   m_EditorClassIdentifier: Assembly-CSharp::HealthUpgrade
-  Amount: 5
+  icon: {fileID: 4028467936095065616, guid: 1e5ff80dcb1f86b4790cb3a7a95a75a5, type: 3}
+  title: Health Boost
+  description: Increases Max Health by 2
+  Amount: 2

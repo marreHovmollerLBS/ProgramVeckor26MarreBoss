@@ -1476,6 +1476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a621985f03820aa45809e81879feafe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoundManager
+  startWithGoodDream: 1
   rounds:
   - roundName: Round 1 (Good)
     enemies:
@@ -1510,6 +1511,14 @@ MonoBehaviour:
   defaultEnemySprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   rangedEnemySprite: {fileID: 0}
   tankEnemySprite: {fileID: 0}
+  meleeAttackAnimationFrames:
+  - {fileID: -7799630308665120462, guid: 2139f39374109e7428bf7cf8e5780274, type: 3}
+  - {fileID: -3685420456038095921, guid: 2139f39374109e7428bf7cf8e5780274, type: 3}
+  - {fileID: 3416407350704618878, guid: 2139f39374109e7428bf7cf8e5780274, type: 3}
+  meleeAnimationFrameRate: 24
+  meleeAttackColor: {r: 1, g: 0, b: 0, a: 0.3}
+  showMeleeVisual: 1
+  meleeAttackAspectRatio: {x: 1, y: 1}
   isGoodDream: 1
   defaultSpawnIdleTime: 1.25
 --- !u!114 &1077092286
@@ -1527,6 +1536,7 @@ MonoBehaviour:
   goodDreamTime: 10
   badDreamTime: 5
   countDownTime: 1
+  currentTime: 0
   countDownText: {fileID: 411347953}
   sliderTransform: {fileID: 559872011}
   sliderImgage: {fileID: 559872012}
@@ -1572,7 +1582,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   IsGoodDream: 0
+  IsGameActive: 0
   Text: {fileID: 953101461}
+  SkipRoundText: {fileID: 0}
+  exitButton: 101
+  skipRoundButton: 110
+  gameManager: {fileID: 0}
 --- !u!1 &1123228674
 GameObject:
   m_ObjectHideFlags: 0
