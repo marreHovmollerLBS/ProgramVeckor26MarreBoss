@@ -733,6 +733,14 @@ PrefabInstance:
       value: PersistentPlayerManager
       objectReference: {fileID: 0}
     - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: coins
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: bossCoins
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
       propertyPath: coinsText
       value: 
       objectReference: {fileID: 1701344809}

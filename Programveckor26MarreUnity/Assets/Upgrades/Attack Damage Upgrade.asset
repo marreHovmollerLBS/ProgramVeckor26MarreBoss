@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e5efcea32f1d84cb77a30c9a4fc9be, type: 3}
   m_Name: Attack Damage Upgrade
   m_EditorClassIdentifier: Assembly-CSharp::MeleeDamageUpgrade
-  icon: {fileID: 3909398323113462293, guid: 45046fd1ecb77ec43b400b61d6d73d86, type: 3}
+  icon: {fileID: 2282011859241685817, guid: 929597ac187d4084cb4b97e9a20b6808, type: 3}
   title: Strength Upgrade
   cost: 2
   chaosLevel: 1
