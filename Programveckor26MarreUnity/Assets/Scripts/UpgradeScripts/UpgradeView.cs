@@ -18,8 +18,12 @@ public class UpgradeView : MonoBehaviour,
     [SerializeField] private Image coinIcon;
     [SerializeField] private TextMeshProUGUI costText;
 
+    [SerializeField] private TextMeshProUGUI chaosText;
+
     [SerializeField] private Sprite normalUpgradeIcon;
     [SerializeField] private Sprite bossUpgradeIcon;
+
+
 
     private Upgrade upgrade;
 
@@ -34,8 +38,11 @@ public class UpgradeView : MonoBehaviour,
         iconImage.sprite = upgrade.icon;
         titleText.text = upgrade.title;
         descriptionText.text = upgrade.description;
+
         costText.text = upgrade.cost.ToString();
         SetIcon();
+
+        chaosText.text = upgrade.chaosLevel.ToString();
     }
     private void SetIcon()
     {
@@ -67,8 +74,26 @@ public class UpgradeView : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        PersistentPlayerManager.Instance.AddUpgrade(upgrade);
-        Debug.Log($"Selected {upgrade.title}");
-        Destroy(gameObject);
+        if(!upgrade.isBossUpgrade && upgrade.cost <= PersistentPlayerManager.Instance.coins)
+        {
+            PersistentPlayerManager.Instance.coins -= upgrade.cost;
+
+            PersistentPlayerManager.Instance.AddUpgrade(upgrade);
+            Debug.Log($"Selected {upgrade.title}");
+            Destroy(gameObject);
+        }
+        else if (upgrade.isBossUpgrade && upgrade.cost <= PersistentPlayerManager.Instance.bossCoins)
+        {
+            PersistentPlayerManager.Instance.bossCoins -= upgrade.cost;
+
+            PersistentPlayerManager.Instance.AddUpgrade(upgrade);
+            Debug.Log($"Selected {upgrade.title}");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("Too expensive!");
+        }
+        
     }
 }

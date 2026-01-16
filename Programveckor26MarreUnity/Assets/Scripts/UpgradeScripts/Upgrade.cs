@@ -8,11 +8,10 @@ public class Upgrade : ScriptableObject
     
     public string title;
     public int cost;
+    public int chaosLevel;
     public bool isBossUpgrade;
     [TextArea(3, 5)]
     public string description;
 
-    public virtual void ApplyUpgrade(Player player)
-    {
-    }
+    public virtual void ApplyUpgrade(Player player) { }
 }

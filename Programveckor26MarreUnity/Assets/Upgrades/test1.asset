@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   icon: {fileID: 8797950268804228127, guid: 54353f51cb4853949920f67244975028, type: 3}
   title: 12
-  cost: 4
+  cost: 13
+  chaosLevel: 2
   isBossUpgrade: 1
   description: asd

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   icon: {fileID: 8364614791704551999, guid: 479a889ea253dd74e8ffbc79070a3d24, type: 3}
   title: hkl
-  cost: 0
+  cost: 2
+  chaosLevel: 4
   isBossUpgrade: 0
   description: hfkf

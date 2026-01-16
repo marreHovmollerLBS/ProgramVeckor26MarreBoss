@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthUpgrade
   icon: {fileID: 4028467936095065616, guid: 1e5ff80dcb1f86b4790cb3a7a95a75a5, type: 3}
   title: Health Boost
+  cost: 10
+  chaosLevel: 1
+  isBossUpgrade: 0
   description: Increases Max Health by 2
   Amount: 2

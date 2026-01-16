@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PersistentPlayerManager : MonoBehaviour
@@ -16,6 +17,10 @@ public class PersistentPlayerManager : MonoBehaviour
     public int coins;
     public int bossCoins;
 
+    [SerializeField] private TextMeshProUGUI coinsText;
+    [SerializeField] private TextMeshProUGUI bossCoinsText;
+    [SerializeField] private TextMeshProUGUI chaosLevelText;
+
     private void Awake()
     {
         // Se till att det bara finns en instans
@@ -27,6 +32,8 @@ public class PersistentPlayerManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        UpdateDisplay();
     }
     /// <summary>
     /// Lägg till en uppgradering i spelarens ägda uppgraderingar
@@ -35,7 +42,17 @@ public class PersistentPlayerManager : MonoBehaviour
     public void AddUpgrade(Upgrade upgrade)
     {
         if (!acquiredUpgrades.Contains(upgrade))
+        {
             acquiredUpgrades.Add(upgrade);
+            chaosLevel += upgrade.chaosLevel;
+        }
+        UpdateDisplay();
+    }
+    public void UpdateDisplay()
+    {
+        coinsText.text = coins.ToString();
+        bossCoinsText.text = bossCoins.ToString();
+        chaosLevelText.text = chaosLevel.ToString();
     }
 }
 
