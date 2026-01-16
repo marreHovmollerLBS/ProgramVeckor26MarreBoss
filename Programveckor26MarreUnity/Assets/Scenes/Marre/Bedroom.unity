@@ -150,10 +150,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   availableUpgrades:
-  - {fileID: 11400000, guid: f47281496f92f074ebf91e08b78a148e, type: 2}
   - {fileID: 11400000, guid: 84c5c224d594a1d43b1a6d8c838abd05, type: 2}
   - {fileID: 11400000, guid: 161b50882f6bb7a4fba039258a686784, type: 2}
   - {fileID: 11400000, guid: 24df8964b6aefaa4ca6953966917eef8, type: 2}
+  - {fileID: 11400000, guid: 3a344d3ef157bd8459d1b77214ac5782, type: 2}
+  - {fileID: 11400000, guid: 03dc0742290ad32469180870088648a7, type: 2}
+  - {fileID: 11400000, guid: 3bfcc2bcf3f29454a95c5c3959358b65, type: 2}
+  - {fileID: 11400000, guid: ec236d94f70551746be73d3da9a515f7, type: 2}
+  - {fileID: 11400000, guid: f47281496f92f074ebf91e08b78a148e, type: 2}
+  - {fileID: 11400000, guid: a03f0a68765a23343a7a11cba98f60ab, type: 2}
+  - {fileID: 11400000, guid: 03b681a6a702c9d438cbebfd50c4baf9, type: 2}
+  - {fileID: 11400000, guid: 94b847169c31ce34d8c4aa45110ea012, type: 2}
   upgradeCardPrefab: {fileID: -4510918419612352204, guid: 44553e6bcdbf83547a7776e6c3a9528d, type: 3}
   spacing: 110
   canvasTransform: {fileID: 1497301640}

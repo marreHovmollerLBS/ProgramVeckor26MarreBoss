@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cab63eb5e02bcf4cb26efd46d3e2eb1, type: 3}
   m_Name: Knockback Upgrade
   m_EditorClassIdentifier: Assembly-CSharp::MeleeKnockbackUpgrade
-  icon: {fileID: 0}
-  title: 
-  cost: 0
-  chaosLevel: 0
+  icon: {fileID: 3476265592262156693, guid: 2adcaa9cac637fe418714830f3f33b30, type: 3}
+  title: Melee Knockback Upgrade
+  cost: 3
+  chaosLevel: 2
   isBossUpgrade: 0
   description: 
-  Amount: 0
+  Amount: 15
