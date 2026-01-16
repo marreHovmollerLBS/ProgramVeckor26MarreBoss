@@ -1825,6 +1825,7 @@ GameObject:
   - component: {fileID: 1077092285}
   - component: {fileID: 1077092284}
   - component: {fileID: 1077092288}
+  - component: {fileID: 1077092289}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1849,19 +1850,54 @@ MonoBehaviour:
   - roundName: Round 1 (Bad)
     duration: 999
     enemies:
-    - enemyType: 2
+    - enemyType: 6
       spawnCount: 1
   - roundName: Round 2 (Good)
-    duration: 6
-    enemies: []
+    duration: 26
+    enemies:
+    - enemyType: 1
+      spawnCount: 2
+    - enemyType: 0
+      spawnCount: 1
   - roundName: Round 3 (Bad)
     duration: 26
     enemies:
     - enemyType: 0
-      spawnCount: 0
+      spawnCount: 5
   - roundName: Round 4 (Good)
+    duration: 13
+    enemies:
+    - enemyType: 1
+      spawnCount: 2
+    - enemyType: 0
+      spawnCount: 4
+  - roundName: Round 5 (Bad)
+    duration: 999
+    enemies:
+    - enemyType: 4
+      spawnCount: 1
+  - roundName: Round 6 (Good)
     duration: 26
-    enemies: []
+    enemies:
+    - enemyType: 1
+      spawnCount: 5
+  - roundName: Round 7 (Bad)
+    duration: 999
+    enemies:
+    - enemyType: 5
+      spawnCount: 1
+    - enemyType: 1
+      spawnCount: 2
+  - roundName: Round 8 (Good)
+    duration: 52
+    enemies:
+    - enemyType: 1
+      spawnCount: 8
+  - roundName: Round 9 (Bad)
+    duration: 999
+    enemies:
+    - enemyType: 6
+      spawnCount: 1
 --- !u!114 &1077092285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1997,6 +2033,18 @@ MonoBehaviour:
   exitButton: 101
   skipRoundButton: 110
   gameManager: {fileID: 1077092286}
+--- !u!114 &1077092289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077092283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePixelPerfect
 --- !u!1 &1123228674
 GameObject:
   m_ObjectHideFlags: 0

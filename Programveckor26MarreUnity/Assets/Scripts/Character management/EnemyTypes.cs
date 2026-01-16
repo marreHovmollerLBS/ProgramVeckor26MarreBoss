@@ -913,7 +913,7 @@ public class TheDevil : Enemy
             // Create warning indicator
             GameObject warning = new GameObject("Meteor Warning");
             warning.transform.position = spawnPos;
-            warning.transform.localScale = Vector3.one * 6f; // Scale transform to 6x (3 unit radius with 0.5 collider)
+            warning.transform.localScale = Vector3.one;
 
             SpriteRenderer warningRenderer = warning.AddComponent<SpriteRenderer>();
 
