@@ -279,7 +279,7 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// Spawn and initialize a Heal enemy (always flees, heals player on death)
     /// </summary>
-    public HealEnemy SpawnHealEnemy(Vector3 position, float speed = 3.5f, float health = 20f, float damage = 0f, float size = 0.4f, float spawnIdleTime = -1f)
+    public HealEnemy SpawnHealEnemy(Vector3 position, float speed = 0f, float health = 20f, float damage = 0f, float size = 0.4f, float spawnIdleTime = -1f)
     {
         GameObject enemyObj = CreateEnemyObject(healEnemyPrefab, position, "Heal Enemy");
         enemyObj.transform.localScale = Vector3.one * size;
@@ -409,7 +409,7 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// Spawn and initialize The Mare boss
     /// </summary>
-    public TheMare SpawnTheMare(Vector3 position, float speed = 3f, float health = 500f, float damage = 30f, float size = 1.2f, float spawnIdleTime = -1f)
+    public TheMare SpawnTheMare(Vector3 position, float speed = 3f, float health = 500f, float damage = 15f, float size = 1.2f, float spawnIdleTime = -1f)
     {
         GameObject bossObj = CreateEnemyObject(theMarePrefab, position, "The Mare");
         bossObj.transform.localScale = Vector3.one * size;
@@ -442,7 +442,7 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// Spawn and initialize The Devil boss (final boss)
     /// </summary>
-    public TheDevil SpawnTheDevil(Vector3 position, float speed = 2f, float health = 650f, float damage = 15f, float size = 1.5f, float spawnIdleTime = -1f)
+    public TheDevil SpawnTheDevil(Vector3 position, float speed = 2f, float health = 650f, float damage = 7.5f, float size = 1.5f, float spawnIdleTime = -1f)
     {
         GameObject bossObj = CreateEnemyObject(theDevilPrefab, position, "The Devil");
         bossObj.transform.localScale = Vector3.one * size;

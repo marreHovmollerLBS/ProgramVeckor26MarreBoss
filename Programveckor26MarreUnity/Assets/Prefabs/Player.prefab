@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6576316884049523593}
   - component: {fileID: 2441121648263168793}
   - component: {fileID: 6850639306902031607}
+  - component: {fileID: -8437804172106158990}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -182,3 +183,22 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &-8437804172106158990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210465396904855955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d905ff8448bde4b90e8941d7ece4b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PersistentPlayerManager
+  acquiredUpgrades: []
+  chaosLevel: 0
+  coins: 0
+  bossCoins: 0
+  coinsText: {fileID: 0}
+  bossCoinsText: {fileID: 0}
+  chaosLevelText: {fileID: 0}
