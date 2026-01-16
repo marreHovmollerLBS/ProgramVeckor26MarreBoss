@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d267681e7bfb96a48b0c8e39236eccd5
+guid: 54353f51cb4853949920f67244975028
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -36,7 +36,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 16
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -102,7 +102,7 @@ ScriptedImporter:
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639040872583711004
+  platformSettingsDirtyTick: 0
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -127,10 +127,10 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: "Sprite-sovgrabb hel inge l\xE4ski huve (1)"
+  - name: GroundSlam Unlock
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    pivot: {x: 0.5714286, y: -0.107142866}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
@@ -138,8 +138,8 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 28
-      height: 24
-    spriteID: d44e3f019a8091f4fbb26b4bef3d9b08
+      height: 28
+    spriteID: bd86fcd47ade93d4f926ea049a80c062
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,57 +153,33 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 3725078281
+      value0: 626308076
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: "Sprite-sovgrabb hel inge l\xE4ski huve (1)"
+    name: GroundSlam Unlock
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: "Sprite-sovgrabb hel inge l\xE4ski huve (1)"
+    - name: GroundSlam Unlock
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 2
-        y: 6
+        x: 0
+        y: 3
         width: 28
-        height: 24
-      spriteId: d44e3f019a8091f4fbb26b4bef3d9b08
+        height: 28
+      spriteId: bd86fcd47ade93d4f926ea049a80c062
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
     parentIndex: -1
   tileSets: []
-  platformSettings:
-  - name: DefaultTexturePlatform
-    overridden: 0
-    ignorePlatformSupport: 0
-    maxTextureSize: 16384
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
-  - name: Standalone
-    overridden: 0
-    ignorePlatformSupport: 0
-    maxTextureSize: 16384
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
+  platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 32}
+  previousTextureSize: {x: 64, y: 64}

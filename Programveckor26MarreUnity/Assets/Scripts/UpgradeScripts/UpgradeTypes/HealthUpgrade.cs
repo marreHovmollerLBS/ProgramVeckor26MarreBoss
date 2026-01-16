@@ -4,9 +4,9 @@ using UnityEngine;
 public class HealthUpgrade : Upgrade
 {
     public int Amount;
-    public override void ApplyUpgrade(Character character)
+    public override void ApplyUpgrade(Player player)
     {
-        base.ApplyUpgrade(character);
-        character.MaxHealth += Amount;
+        base.ApplyUpgrade(player);
+        player.MaxHealth += Amount;
     }
 }

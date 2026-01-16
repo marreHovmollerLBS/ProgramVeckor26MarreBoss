@@ -7,15 +7,15 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [Header("Health Bar Settings")]
-    [SerializeField] private Image healthBarFill;
-    [SerializeField] private Character player;
+    [SerializeField] private RectTransform healthBarFill;
+    [SerializeField] private Character playerClass;
 
     private void Start()
     {
         // If player not assigned, try to find it
-        if (player == null)
+        if (playerClass == null)
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Character>();
+            playerClass = GameObject.FindGameObjectWithTag("Player").GetComponent<Character>();
         }
 
         // Initialize health bar to full
@@ -33,13 +33,13 @@ public class HealthBar : MonoBehaviour
     /// </summary>
     private void UpdateHealthBar()
     {
-        if (player != null && healthBarFill != null)
+        if (playerClass != null && healthBarFill != null)
         {
             // Calculate health percentage (0 to 1)
-            float healthPercent = player.CurrentHealth / player.MaxHealth;
+            float healthPercent = playerClass.CurrentHealth / playerClass.MaxHealth;
 
             // Update the fill amount
-            healthBarFill.fillAmount = healthPercent;
+            healthBarFill.localScale = new Vector3(healthPercent,1,1);
         }
     }
 }

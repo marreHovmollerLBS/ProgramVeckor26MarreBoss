@@ -29,6 +29,11 @@ public abstract class Character : MonoBehaviour
     protected SpriteRenderer spriteRenderer;
     protected Collider2D col;
 
+    [Header("Health Bar")]
+    protected FloatingHealthBar floatingHealthBar;
+
+    public FloatingHealthBar HealthBar => floatingHealthBar;
+
     // Movement direction
     protected Vector2 moveDirection;
 
@@ -163,6 +168,12 @@ public abstract class Character : MonoBehaviour
         currentHealth -= damageAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
+        // Show health bar when damaged
+        if (floatingHealthBar != null)
+        {
+            floatingHealthBar.Show();
+        }
+
         // Apply knockback
         if (rb != null && knockbackDirection != Vector2.zero)
         {
@@ -247,5 +258,13 @@ public abstract class Character : MonoBehaviour
     protected virtual void OnDreamStateChanged()
     {
         // Override in subclasses for specific dream state behavior
+    }
+
+    /// <summary>
+    /// Set healthbar to the right instance
+    /// </summary>
+    public virtual void SetHealthBar(FloatingHealthBar healthBar)
+    {
+        floatingHealthBar = healthBar;
     }
 }

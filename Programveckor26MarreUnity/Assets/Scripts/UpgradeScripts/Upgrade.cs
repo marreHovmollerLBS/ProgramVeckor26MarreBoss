@@ -5,11 +5,16 @@ public class Upgrade : ScriptableObject
 {
     [Header("UI Display")]
     public Sprite icon;
+    
     public string title;
+    public int cost;
+    public int chaosLevel;
+    public bool isBossUpgrade;
     [TextArea(3, 5)]
     public string description;
 
-    public virtual void ApplyUpgrade(Character character)
-    {   
+    public virtual void ApplyUpgrade(Player player) 
+    {
+        PersistentPlayerManager.Instance.acquiredUpgrades.Remove(this);
     }
 }

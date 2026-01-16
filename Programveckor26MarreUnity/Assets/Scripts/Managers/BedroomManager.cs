@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class ReturnScript : MonoBehaviour
+public class BedroomManager : MonoBehaviour
 {
     public TextMeshProUGUI Text;
     [SerializeField] private KeyCode returnButton = KeyCode.E;

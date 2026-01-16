@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b35dffaf753ea498bef0cd68ebeb20, type: 3}
   m_Name: test1
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
-  icon: {fileID: 4565712808963722855, guid: 13af2e9d9acdb0d458a2797c43d6b447, type: 3}
+  icon: {fileID: 8797950268804228127, guid: 54353f51cb4853949920f67244975028, type: 3}
   title: 12
+  cost: 13
+  chaosLevel: 2
+  isBossUpgrade: 1
   description: asd
