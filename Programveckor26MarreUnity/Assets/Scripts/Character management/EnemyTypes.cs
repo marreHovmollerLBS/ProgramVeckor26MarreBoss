@@ -107,6 +107,10 @@ public class HealEnemy : Enemy
                 }
             }
         }
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.coins += 2;
+        }
 
         base.Die();
     }
@@ -330,6 +334,14 @@ public class EvilFather : Enemy
         usesAttackState = true;
         currentShieldHealth = shieldHealth;
     }
+    public override void Die()
+    {
+        base.Die()
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
+    }
 }
 
 /// <summary>
@@ -508,6 +520,14 @@ public class TheMare : Enemy
         base.InitializeEnemy(speed, health, dmg, sze, attack, goodDream, spawnIdleTime);
         gameObject.name = "The Mare";
         usesAttackState = true;
+    }
+    public override void Die()
+    {
+        base.Die()
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
     }
 }
 
@@ -1062,5 +1082,13 @@ public class TheDevil : Enemy
         // Draw hellfire radius
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, hellFireRadius);
+    }
+    public override void Die()
+    {
+        base.Die()
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
     }
 }
