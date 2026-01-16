@@ -18,7 +18,7 @@ public class BedroomManager : MonoBehaviour
         if (Input.GetKeyDown(returnButton))
         {
             Debug.Log("returning");
-            SceneManager.LoadScene("Main Scene");
+            SceneManager.LoadScene("TheodorScene");
         }
     }
 }

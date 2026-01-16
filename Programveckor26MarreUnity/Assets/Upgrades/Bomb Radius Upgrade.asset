@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec86cdd50295e842a7c9f89902851f7, type: 3}
   m_Name: Bomb Radius Upgrade
   m_EditorClassIdentifier: Assembly-CSharp::BombRadiusUpgrade
-  icon: {fileID: 3503774279892504750, guid: cbe713040fdf42a4d81170fe61a76836, type: 3}
+  icon: {fileID: 7130178120556912366, guid: 87fa7c5fc605dc6439613f5ec8a5649d, type: 3}
   title: Bomb Radius
   cost: 6
   chaosLevel: 4

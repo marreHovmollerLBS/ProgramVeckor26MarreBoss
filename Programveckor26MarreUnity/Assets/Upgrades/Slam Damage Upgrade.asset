@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02ce2601844c694e88597240b40226e, type: 3}
   m_Name: Slam Damage Upgrade
   m_EditorClassIdentifier: Assembly-CSharp::SlamDamageUpgrade
-  icon: {fileID: 3476265592262156693, guid: 2adcaa9cac637fe418714830f3f33b30, type: 3}
+  icon: {fileID: -8441869152836817708, guid: de502da1c74a9cf41a3ce8336cb1c639, type: 3}
   title: Slam Damage Upgrade
   cost: 8
-  chaosLevel: 0
+  chaosLevel: 5
   isBossUpgrade: 0
   description: 
-  Amount: 0
+  Amount: 30
