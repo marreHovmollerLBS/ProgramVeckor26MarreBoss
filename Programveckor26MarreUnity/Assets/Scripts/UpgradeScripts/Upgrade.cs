@@ -13,5 +13,8 @@ public class Upgrade : ScriptableObject
     [TextArea(3, 5)]
     public string description;
 
-    public virtual void ApplyUpgrade(Player player) { }
+    public virtual void ApplyUpgrade(Player player) 
+    {
+        PersistentPlayerManager.Instance.acquiredUpgrades.Remove(this);
+    }
 }
