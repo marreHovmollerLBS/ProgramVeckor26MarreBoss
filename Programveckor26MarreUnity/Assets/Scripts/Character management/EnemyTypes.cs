@@ -336,7 +336,7 @@ public class EvilFather : Enemy
     }
     public override void Die()
     {
-        base.Die()
+        base.Die();
         if (PersistentPlayerManager.Instance != null)
         {
             PersistentPlayerManager.Instance.bossCoins += 1;
@@ -523,7 +523,7 @@ public class TheMare : Enemy
     }
     public override void Die()
     {
-        base.Die()
+        base.Die();
         if (PersistentPlayerManager.Instance != null)
         {
             PersistentPlayerManager.Instance.bossCoins += 1;
@@ -1085,7 +1085,7 @@ public class TheDevil : Enemy
     }
     public override void Die()
     {
-        base.Die()
+        base.Die();
         if (PersistentPlayerManager.Instance != null)
         {
             PersistentPlayerManager.Instance.bossCoins += 1;
