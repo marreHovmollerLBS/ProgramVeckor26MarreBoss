@@ -1687,7 +1687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7960513328701116400, guid: be5856c03ece99f4f8416aecd55e7175, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7960513328701116400, guid: be5856c03ece99f4f8416aecd55e7175, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1849,7 +1849,7 @@ MonoBehaviour:
   - roundName: Round 1 (Bad)
     duration: 999
     enemies:
-    - enemyType: 6
+    - enemyType: 2
       spawnCount: 1
   - roundName: Round 2 (Good)
     duration: 6
@@ -1893,6 +1893,10 @@ MonoBehaviour:
   evilFatherSprite: {fileID: 441350444273336126, guid: 1a4af00a3aeb9ed4993ba6d18391a38c, type: 3}
   theMareSprite: {fileID: 441350444273336126, guid: 1a4af00a3aeb9ed4993ba6d18391a38c, type: 3}
   theDevilSprite: {fileID: 441350444273336126, guid: 1a4af00a3aeb9ed4993ba6d18391a38c, type: 3}
+  hellFireSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
+  groundSlamWaveSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
+  meteorWarningSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
+  meteorImpactSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
   meleeAttackAnimationFrames:
   - {fileID: -7799630308665120462, guid: 2139f39374109e7428bf7cf8e5780274, type: 3}
   - {fileID: -3685420456038095921, guid: 2139f39374109e7428bf7cf8e5780274, type: 3}
@@ -1912,9 +1916,9 @@ MonoBehaviour:
   isGoodDream: 1
   defaultSpawnIdleTime: 1.25
   createHealthBars: 1
-  enemyHealthBarSize: {x: 1, y: 0.15}
+  enemyHealthBarSize: {x: 1, y: 0.1}
   enemyHealthBarOffset: {x: 0, y: 0.8, z: 0}
-  bossHealthBarSize: {x: 2, y: 0.25}
+  bossHealthBarSize: {x: 2, y: 0.2}
   bossHealthBarOffset: {x: 0, y: 1.5, z: 0}
   enemyHealthBarBackground: {r: 0.2, g: 0.2, b: 0.2, a: 0.8}
   enemyHealthBarFill: {r: 0, g: 1, b: 0, a: 1}
