@@ -13,7 +13,7 @@ public class ExitScript : MonoBehaviour
     [SerializeField] private KeyCode skipRoundButton = KeyCode.N;
     [SerializeField] private GameManager gameManager;
 
-    private bool SwitchActivated;
+    public bool SwitchActivated;
     private bool noEnemiesInScene = false;
 
     void Start()
@@ -77,7 +77,7 @@ public class ExitScript : MonoBehaviour
         }
     }
 
-    private void SkipRound()
+    public void SkipRound()
     {
         if (gameManager != null)
         {

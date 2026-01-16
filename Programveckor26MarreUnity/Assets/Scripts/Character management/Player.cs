@@ -25,11 +25,14 @@ public class Player : Character
     [Header("Player Health Bar")]
     private PlayerHealthBar playerHealthBar;
 
+    private ExitScript exitScript;
     public PlayerHealthBar PlayerHealthBarComponent => playerHealthBar;
 
     protected override void Awake()
     {
         base.Awake();
+
+        exitScript = FindObjectOfType<ExitScript>();
 
         // Player specific initialization
         gameObject.tag = "Player";
@@ -154,7 +157,16 @@ public class Player : Character
             playerHealthBar.gameObject.SetActive(false);
         }
 
-        // Implement game over logic
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.acquiredUpgrades = new();
+            PersistentPlayerManager.Instance.coins = 0;
+            PersistentPlayerManager.Instance.bossCoins = 0;
+            PersistentPlayerManager.Instance.chaosLevel = 0;
+        }
+
+        exitScript.SwitchActivated = true;
+        exitScript.OnSwitchToBadDream();
     }
 
     protected override void OnDreamStateChanged()

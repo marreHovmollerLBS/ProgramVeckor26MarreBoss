@@ -1848,10 +1848,10 @@ MonoBehaviour:
   startWithGoodDream: 0
   rounds:
   - roundName: Round 1 (Bad)
-    duration: 999
+    duration: 26
     enemies:
-    - enemyType: 6
-      spawnCount: 1
+    - enemyType: 0
+      spawnCount: 2
   - roundName: Round 2 (Good)
     duration: 26
     enemies:
@@ -1941,13 +1941,28 @@ MonoBehaviour:
   meleeAttackColor: {r: 1, g: 1, b: 1, a: 1}
   showMeleeVisual: 1
   meleeAttackAspectRatio: {x: 1, y: 2}
-  bombAnimationFrames: []
+  bombAnimationFrames:
+  - {fileID: -5056423678770305581, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: 1506377491936782353, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: 8208061377519753504, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: -359377258782423488, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: -5482689335387388062, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
   bombAnimationFrameRate: 12
-  explosionAnimationFrames: []
+  explosionAnimationFrames:
+  - {fileID: -927256298160664321, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
+  - {fileID: 2852912198536189370, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
+  - {fileID: -3375454431735621314, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
+  - {fileID: 448851393442037504, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
   explosionAnimationFrameRate: 24
-  groundSlamAnimationFrames: []
-  groundSlamAnimationFrameRate: 24
-  projectileSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
+  groundSlamAnimationFrames:
+  - {fileID: 3674126878385006771, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: 7232092496312929812, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: 3260510025509273934, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: 2893982367259311340, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: -1145535273593798336, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: -5585273380917199324, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  groundSlamAnimationFrameRate: 12
+  projectileSprite: {fileID: -5639632816484659557, guid: 82691fe9326e6334db7f1d234678e8c9, type: 3}
   shootTowardsMouse: 0
   isGoodDream: 1
   defaultSpawnIdleTime: 1.25
@@ -2033,6 +2048,7 @@ MonoBehaviour:
   exitButton: 101
   skipRoundButton: 110
   gameManager: {fileID: 1077092286}
+  SwitchActivated: 0
 --- !u!114 &1077092289
 MonoBehaviour:
   m_ObjectHideFlags: 0
