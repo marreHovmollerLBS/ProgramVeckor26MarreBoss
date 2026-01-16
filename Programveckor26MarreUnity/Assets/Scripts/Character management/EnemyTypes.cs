@@ -334,13 +334,14 @@ public class EvilFather : Enemy
         usesAttackState = true;
         currentShieldHealth = shieldHealth;
     }
-    public override void Die()
+    protected override void Die()
     {
-        base.Die();
+        
         if (PersistentPlayerManager.Instance != null)
         {
             PersistentPlayerManager.Instance.bossCoins += 1;
         }
+        base.Die();
     }
 }
 
@@ -521,13 +522,14 @@ public class TheMare : Enemy
         gameObject.name = "The Mare";
         usesAttackState = true;
     }
-    public override void Die()
+    protected override void Die()
     {
-        base.Die();
+
         if (PersistentPlayerManager.Instance != null)
         {
             PersistentPlayerManager.Instance.bossCoins += 1;
         }
+        base.Die();
     }
 }
 
@@ -1041,6 +1043,12 @@ public class TheDevil : Enemy
 
         // Don't destroy immediately - let explosion play
         Destroy(gameObject, 2f);
+
+        base.Die();
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
     }
 
     private System.Collections.IEnumerator DeathExplosion()
@@ -1082,13 +1090,5 @@ public class TheDevil : Enemy
         // Draw hellfire radius
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, hellFireRadius);
-    }
-    public override void Die()
-    {
-        base.Die();
-        if (PersistentPlayerManager.Instance != null)
-        {
-            PersistentPlayerManager.Instance.bossCoins += 1;
-        }
     }
 }
