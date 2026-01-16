@@ -15,6 +15,6 @@ MonoBehaviour:
   attackRange: 1
   attackCooldown: 1
   damageMultiplier: 1
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 6413360777180552307, guid: c71dd996daba2064391ae2664ce5b4a3, type: 3}
   projectileSpeed: 10
   knockbackForce: 3

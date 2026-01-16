@@ -199,7 +199,7 @@ public class EvilFather : Enemy
     [SerializeField] private float teleportCooldown = 1f;
     [SerializeField] private float teleportRange = 3f;
     [SerializeField] private int shieldHealth = 50;
-    [SerializeField] private float shieldRegenDelay = 8f;
+    [SerializeField] private float shieldRegenDelay = 10f;
 
     private float nextTeleportTime;
     private int currentShieldHealth;
@@ -215,6 +215,17 @@ public class EvilFather : Enemy
 
         gameObject.name = "Evil Father";
         currentShieldHealth = shieldHealth;
+    }
+
+    protected override void InitializeComponents()
+    {
+        base.InitializeComponents();
+
+        // Make sure the collider is NOT a trigger for attack state
+        if (col != null)
+        {
+            col.isTrigger = false;
+        }
     }
 
     protected override void HandleBehavior()
@@ -327,12 +338,16 @@ public class EvilFather : Enemy
 public class TheMare : Enemy
 {
     [Header("Mare Settings")]
-    [SerializeField] private int numberOfClones = 3;
-    [SerializeField] private float cloneSpawnCooldown = 8f;
+    [SerializeField] private int numberOfClones = 2;
+    [SerializeField] private float cloneSpawnCooldown = 15f;
     [SerializeField] private float shadowDashSpeed = 15f;
     [SerializeField] private float shadowDashCooldown = 4f;
     [SerializeField] private float shadowDashDuration = 0.5f;
     [SerializeField] private GameObject clonePrefab;
+
+    [Header("Arena Bounds")]
+    [SerializeField] private float arenaWidth = 15f; // Arena width
+    [SerializeField] private float arenaHeight = 11f; // Arena height
 
     private float nextCloneSpawnTime;
     private float nextShadowDashTime;
@@ -392,14 +407,24 @@ public class TheMare : Enemy
 
     private void SpawnShadowClones()
     {
+        // Calculate arena bounds from configurable dimensions
+        float arenaHalfWidth = arenaWidth / 2f;
+        float arenaHalfHeight = arenaHeight / 2f;
+
         for (int i = 0; i < numberOfClones; i++)
         {
             Vector2 randomOffset = Random.insideUnitCircle * 3f;
             Vector3 spawnPos = transform.position + (Vector3)randomOffset;
 
+            // Clamp spawn position to arena bounds
+            spawnPos.x = Mathf.Clamp(spawnPos.x, -arenaHalfWidth, arenaHalfWidth);
+            spawnPos.y = Mathf.Clamp(spawnPos.y, -arenaHalfHeight, arenaHalfHeight);
+            spawnPos.z = 0f;
+
             // Create a weaker clone enemy
             GameObject clone = new GameObject("Shadow Clone");
             clone.transform.position = spawnPos;
+            clone.transform.localScale = Vector3.one * (size * 0.7f);
 
             DefaultEnemy cloneEnemy = clone.AddComponent<DefaultEnemy>();
             cloneEnemy.InitializeEnemy(
@@ -412,10 +437,15 @@ public class TheMare : Enemy
                 0f
             );
 
-            // Make clones visually distinct
-            if (cloneEnemy.SpriteRenderer != null)
+            // Copy the sprite from the original Mare
+            if (spriteRenderer != null && spriteRenderer.sprite != null)
             {
-                cloneEnemy.SpriteRenderer.color = new Color(0.5f, 0.5f, 0.5f, 0.7f);
+                cloneEnemy.SetSprite(spriteRenderer.sprite);
+                // Make clones visually distinct with darker, semi-transparent appearance
+                if (cloneEnemy.SpriteRenderer != null)
+                {
+                    cloneEnemy.SpriteRenderer.color = new Color(0.3f, 0.3f, 0.5f, 0.7f);
+                }
             }
 
             // Auto-destroy clones after 10 seconds
@@ -489,18 +519,41 @@ public class TheDevil : Enemy
     [Header("Devil Settings")]
     [SerializeField] private float phase2HealthThreshold = 0.66f;
     [SerializeField] private float phase3HealthThreshold = 0.33f;
-    [SerializeField] private float hellFireCooldown = 3f;
+    [SerializeField] private float hellFireCooldown = 18f; // Long cooldown between volleys
+    [SerializeField] private int hellFireWaves = 3; // Number of waves per volley
+    [SerializeField] private float hellFireWaveDelay = 0.6f; // Delay between waves
     [SerializeField] private float hellFireRadius = 4f;
     [SerializeField] private int hellFireCount = 8;
+    [SerializeField] private float hellFireSpeed = 7f;
     [SerializeField] private GameObject hellFirePrefab;
+    [SerializeField] private Sprite hellFireSprite;
     [SerializeField] private float enrageDamageMultiplier = 1.5f;
     [SerializeField] private float enrageSpeedMultiplier = 1.3f;
+    [SerializeField] private float summonCooldown = 15f;
+    [SerializeField] private int minionCount = 2;
+    [SerializeField] private float groundSlamCooldown = 7f;
+    [SerializeField] private float groundSlamRadius = 1f;
+    [SerializeField] private Sprite groundSlamWaveSprite; // Sprite for ground slam wave
+    [SerializeField] private float meteorCooldown = 12f;
+    [SerializeField] private int meteorCount = 5;
+    [SerializeField] private Sprite meteorWarningSprite; // Sprite for meteor warning
+    [SerializeField] private Sprite meteorImpactSprite; // Sprite for meteor impact
+
+    [Header("Arena Bounds")]
+    [SerializeField] private float arenaWidth = 15f; // Arena width
+    [SerializeField] private float arenaHeight = 11f; // Arena height
 
     private int currentPhase = 1;
     private float nextHellFireTime;
+    private float nextSummonTime;
+    private float nextGroundSlamTime;
+    private float nextMeteorTime;
     private bool isEnraged = false;
     private float baseSpeed;
     private float baseDamage;
+    private bool hasEnteredPhase2 = false;
+    private bool hasEnteredPhase3 = false;
+    private bool isCastingHellfire = false; // Prevent overlapping hellfire casts
 
     protected override void Awake()
     {
@@ -514,6 +567,17 @@ public class TheDevil : Enemy
         baseDamage = damage;
     }
 
+    protected override void InitializeComponents()
+    {
+        base.InitializeComponents();
+
+        // Make sure the collider is NOT a trigger for attack state
+        if (col != null)
+        {
+            col.isTrigger = false;
+        }
+    }
+
     protected override void HandleBehavior()
     {
         if (isSpawning)
@@ -525,11 +589,35 @@ public class TheDevil : Enemy
         // Check for phase transitions
         CheckPhaseTransition();
 
-        // Hellfire attack
-        if (Time.time >= nextHellFireTime && !isGoodDream && target != null)
+        if (!isGoodDream && target != null)
         {
-            SpawnHellFire();
-            nextHellFireTime = Time.time + hellFireCooldown;
+            // Hellfire attack - all phases (multiple waves in quick succession)
+            if (Time.time >= nextHellFireTime && !isCastingHellfire)
+            {
+                StartCoroutine(SpawnHellFireVolley());
+                nextHellFireTime = Time.time + hellFireCooldown;
+            }
+
+            // Ground Slam - ALL PHASES (now available from start)
+            if (Time.time >= nextGroundSlamTime)
+            {
+                PerformGroundSlam();
+                nextGroundSlamTime = Time.time + groundSlamCooldown;
+            }
+
+            // Summon minions - Phase 2 and 3
+            if (currentPhase >= 2 && Time.time >= nextSummonTime)
+            {
+                SummonMinions();
+                nextSummonTime = Time.time + summonCooldown;
+            }
+
+            // Meteor Rain - Phase 3 only
+            if (currentPhase >= 3 && Time.time >= nextMeteorTime)
+            {
+                StartCoroutine(MeteorRain());
+                nextMeteorTime = Time.time + meteorCooldown;
+            }
         }
 
         // Normal behavior
@@ -549,13 +637,15 @@ public class TheDevil : Enemy
     {
         float healthPercent = currentHealth / maxHealth;
 
-        if (currentPhase == 1 && healthPercent <= phase2HealthThreshold)
+        if (currentPhase == 1 && healthPercent <= phase2HealthThreshold && !hasEnteredPhase2)
         {
             EnterPhase2();
+            hasEnteredPhase2 = true;
         }
-        else if (currentPhase == 2 && healthPercent <= phase3HealthThreshold)
+        else if (currentPhase == 2 && healthPercent <= phase3HealthThreshold && !hasEnteredPhase3)
         {
             EnterPhase3();
+            hasEnteredPhase3 = true;
         }
     }
 
@@ -566,16 +656,22 @@ public class TheDevil : Enemy
         // Increase stats
         movementSpeed = baseSpeed * 1.2f;
         damage = baseDamage * 1.2f;
-        hellFireCooldown *= 0.8f;
+        hellFireCooldown = 15f; // Slightly faster hellfire volleys
+        hellFireWaves = 4; // More waves per volley
         hellFireCount = 12;
+        summonCooldown = 10f;
+        groundSlamCooldown = 6f; // Faster ground slams
 
-        Debug.Log("The Devil entered Phase 2!");
+        Debug.Log("The Devil entered Phase 2! More hellfire waves and faster attacks!");
 
         // Visual indicator - could make sprite darker/redder
         if (spriteRenderer != null)
         {
             spriteRenderer.color = new Color(1f, 0.7f, 0.7f);
         }
+
+        // Heal a bit on phase transition to make fight longer
+        Heal(maxHealth * 0.1f);
     }
 
     private void EnterPhase3()
@@ -586,19 +682,46 @@ public class TheDevil : Enemy
         // Dramatically increase stats
         movementSpeed = baseSpeed * enrageSpeedMultiplier;
         damage = baseDamage * enrageDamageMultiplier;
-        hellFireCooldown *= 0.5f;
+        hellFireCooldown = 12f; // Even faster hellfire
+        hellFireWaves = 5; // Maximum waves per volley
         hellFireCount = 16;
+        summonCooldown = 8f;
+        groundSlamCooldown = 4f; // Very fast ground slams
+        meteorCooldown = 12f;
 
-        Debug.Log("The Devil entered Phase 3 - ENRAGED!");
+        Debug.Log("The Devil entered Phase 3 - ENRAGED! METEOR RAIN UNLOCKED! MAXIMUM HELLFIRE!");
 
         // Visual indicator - make sprite red
         if (spriteRenderer != null)
         {
             spriteRenderer.color = new Color(1f, 0.3f, 0.3f);
         }
+
+        // Heal on phase transition
+        Heal(maxHealth * 0.15f);
     }
 
-    private void SpawnHellFire()
+    private System.Collections.IEnumerator SpawnHellFireVolley()
+    {
+        isCastingHellfire = true;
+
+        // Shoot multiple waves in quick succession
+        for (int wave = 0; wave < hellFireWaves; wave++)
+        {
+            SpawnHellFireWave();
+
+            // Wait before next wave (except after last wave)
+            if (wave < hellFireWaves - 1)
+            {
+                yield return new WaitForSeconds(hellFireWaveDelay);
+            }
+        }
+
+        isCastingHellfire = false;
+        Debug.Log($"The Devil unleashed {hellFireWaves} waves of hellfire!");
+    }
+
+    private void SpawnHellFireWave()
     {
         if (target == null) return;
 
@@ -614,21 +737,238 @@ public class TheDevil : Enemy
             // Create hellfire projectile
             GameObject hellFire = new GameObject("HellFire");
             hellFire.transform.position = spawnPos;
+            hellFire.transform.localScale = Vector3.one * 0.5f;
 
-            Projectile proj = hellFire.AddComponent<Projectile>();
-            proj.Initialize(direction, 5f, damage * 0.8f, this, 5f);
-
-            // Add visual component
-            SpriteRenderer sr = hellFire.GetComponent<SpriteRenderer>();
-            if (sr != null)
+            // Add sprite renderer for visibility
+            SpriteRenderer sr = hellFire.AddComponent<SpriteRenderer>();
+            if (hellFireSprite != null)
             {
-                sr.color = Color.red;
+                sr.sprite = hellFireSprite;
             }
+            else
+            {
+                // Create a simple colored circle if no sprite assigned
+                sr.color = new Color(1f, 0.3f, 0f, 1f); // Orange-red color
+            }
+
+            // Add projectile component
+            Projectile proj = hellFire.AddComponent<Projectile>();
+            proj.Initialize(direction, hellFireSpeed, damage * 0.8f, this, 5f);
 
             Destroy(hellFire, 3f);
         }
+    }
 
-        Debug.Log($"The Devil unleashed {hellFireCount} hellfire projectiles!");
+    private void SummonMinions()
+    {
+        if (target == null) return;
+
+        // Calculate arena bounds from configurable dimensions
+        float arenaHalfWidth = arenaWidth / 2f;
+        float arenaHalfHeight = arenaHeight / 2f;
+
+        for (int i = 0; i < minionCount; i++)
+        {
+            // Generate random offset but clamp to arena bounds
+            Vector2 randomOffset = Random.insideUnitCircle * 4f;
+            Vector3 spawnPos = transform.position + (Vector3)randomOffset;
+
+            // Clamp spawn position to arena bounds
+            spawnPos.x = Mathf.Clamp(spawnPos.x, -arenaHalfWidth, arenaHalfWidth);
+            spawnPos.y = Mathf.Clamp(spawnPos.y, -arenaHalfHeight, arenaHalfHeight);
+            spawnPos.z = 0f;
+
+            // Create minion
+            GameObject minion = new GameObject("Devil Minion");
+            minion.transform.position = spawnPos;
+            minion.transform.localScale = Vector3.one * (size * 0.5f);
+
+            DefaultEnemy minionEnemy = minion.AddComponent<DefaultEnemy>();
+            minionEnemy.InitializeEnemy(
+                speed: movementSpeed * 0.7f,
+                health: maxHealth * 0.15f,
+                damage * 0.6f,
+                size * 0.5f,
+                attackType,
+                isGoodDream,
+                0f
+            );
+
+            // Copy sprite and make it look demonic
+            if (spriteRenderer != null && spriteRenderer.sprite != null)
+            {
+                minionEnemy.SetSprite(spriteRenderer.sprite);
+                if (minionEnemy.SpriteRenderer != null)
+                {
+                    minionEnemy.SpriteRenderer.color = new Color(0.5f, 0f, 0f, 0.8f); // Dark red
+                }
+            }
+
+            // Auto-destroy after 15 seconds
+            Destroy(minion, 15f);
+        }
+
+        Debug.Log($"The Devil summoned {minionCount} minions!");
+    }
+
+    private void PerformGroundSlam()
+    {
+        if (target == null) return;
+
+        // AOE damage around the boss
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, groundSlamRadius);
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                Character player = hit.GetComponent<Character>();
+                if (player != null)
+                {
+                    Vector2 knockbackDir = (player.transform.position - transform.position).normalized;
+                    float slamDamage = damage * 1.5f;
+                    player.TakeDamage(slamDamage, knockbackDir * 15f);
+                }
+            }
+        }
+
+        // Visual effect - create expanding wave
+        StartCoroutine(CreateGroundSlamWave());
+
+        Debug.Log("The Devil performed a devastating ground slam!");
+    }
+
+    private System.Collections.IEnumerator CreateGroundSlamWave()
+    {
+        // Create visual wave effect
+        GameObject wave = new GameObject("Ground Slam Wave");
+        wave.transform.position = transform.position;
+
+        SpriteRenderer waveRenderer = wave.AddComponent<SpriteRenderer>();
+
+        // Use sprite if available, otherwise use colored visual
+        if (groundSlamWaveSprite != null)
+        {
+            waveRenderer.sprite = groundSlamWaveSprite;
+            waveRenderer.color = new Color(1f, 0f, 0f, 0.7f); // Bright red with good visibility
+        }
+        else
+        {
+            // Fallback: create visible colored indicator
+            waveRenderer.color = new Color(1f, 0f, 0f, 0.7f); // Bright red
+        }
+
+        waveRenderer.sortingOrder = 10; // Make sure it's visible above ground
+
+        // Add circle collider with standard radius 0.5, scale via transform
+        CircleCollider2D waveCollider = wave.AddComponent<CircleCollider2D>();
+        waveCollider.radius = 0.5f; // Always 0.5
+        waveCollider.isTrigger = true;
+
+        float elapsed = 0f;
+        float duration = 0.5f;
+        float startScale = 1f;
+        float endScale = groundSlamRadius * 4f; // Scale transform to match visual size
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed / duration;
+
+            // Scale the TRANSFORM, not the collider radius
+            wave.transform.localScale = Vector3.one * Mathf.Lerp(startScale, endScale, progress);
+
+            Color color = waveRenderer.color;
+            color.a = Mathf.Lerp(0.7f, 0f, progress); // Start more visible
+            waveRenderer.color = color;
+
+            yield return null;
+        }
+
+        Destroy(wave);
+    }
+
+    private System.Collections.IEnumerator MeteorRain()
+    {
+        if (target == null) yield break;
+
+        Debug.Log("The Devil summons METEOR RAIN!");
+
+        // Calculate arena bounds from configurable dimensions
+        float arenaHalfWidth = arenaWidth / 2f;
+        float arenaHalfHeight = arenaHeight / 2f;
+
+        for (int i = 0; i < meteorCount; i++)
+        {
+            // Spawn meteors near player but within arena bounds
+            Vector2 randomOffset = Random.insideUnitCircle * 8f;
+            Vector3 spawnPos = target.transform.position + (Vector3)randomOffset;
+
+            // Clamp spawn position to arena bounds (with small margin for meteor radius)
+            float meteorMargin = 2f; // Keep meteors away from edges
+            spawnPos.x = Mathf.Clamp(spawnPos.x, -arenaHalfWidth + meteorMargin, arenaHalfWidth - meteorMargin);
+            spawnPos.y = Mathf.Clamp(spawnPos.y, -arenaHalfHeight + meteorMargin, arenaHalfHeight - meteorMargin);
+            spawnPos.z = 0f;
+
+            // Create warning indicator
+            GameObject warning = new GameObject("Meteor Warning");
+            warning.transform.position = spawnPos;
+            warning.transform.localScale = Vector3.one * 6f; // Scale transform to 6x (3 unit radius with 0.5 collider)
+
+            SpriteRenderer warningRenderer = warning.AddComponent<SpriteRenderer>();
+
+            // Use sprite if available
+            if (meteorWarningSprite != null)
+            {
+                warningRenderer.sprite = meteorWarningSprite;
+                warningRenderer.color = new Color(1f, 0f, 0f, 0.6f); // Bright red warning
+            }
+            else
+            {
+                // Fallback: bright red circle
+                warningRenderer.color = new Color(1f, 0f, 0f, 0.6f);
+            }
+
+            warningRenderer.sortingOrder = 10; // Make sure it's visible
+
+            // Circle collider with standard radius 0.5, scale via transform
+            CircleCollider2D warningCollider = warning.AddComponent<CircleCollider2D>();
+            warningCollider.radius = 0.5f; // Always 0.5
+            warningCollider.isTrigger = true;
+
+            // Wait before meteor impact
+            yield return new WaitForSeconds(1f);
+
+            // Meteor impact - create damaging AOE (using Physics2D.OverlapCircle with correct world-space radius)
+            float impactRadius = 1.5f; // 1.5 unit world-space radius
+            Collider2D[] hits = Physics2D.OverlapCircleAll(spawnPos, impactRadius);
+            foreach (Collider2D hit in hits)
+            {
+                if (hit.CompareTag("Player"))
+                {
+                    Character player = hit.GetComponent<Character>();
+                    if (player != null)
+                    {
+                        Vector2 knockbackDir = (player.transform.position - (Vector3)spawnPos).normalized;
+                        player.TakeDamage(damage * 1.2f, knockbackDir * 10f);
+                    }
+                }
+            }
+
+            // Visual meteor impact
+            if (meteorImpactSprite != null)
+            {
+                warningRenderer.sprite = meteorImpactSprite;
+            }
+            warningRenderer.color = new Color(1f, 0.5f, 0f, 1f); // Bright orange impact
+
+            yield return new WaitForSeconds(0.1f);
+
+            Destroy(warning);
+
+            // Short delay between meteors
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     public override void InitializeEnemy(float speed, float health, float dmg, float sze, AttackType attack, bool goodDream = false, float spawnIdleTime = 1f)
@@ -640,11 +980,87 @@ public class TheDevil : Enemy
         baseDamage = dmg;
     }
 
+    /// <summary>
+    /// Set the sprite for hellfire projectiles
+    /// </summary>
+    public void SetHellFireSprite(Sprite sprite)
+    {
+        hellFireSprite = sprite;
+    }
+
+    /// <summary>
+    /// Set the sprite for ground slam wave
+    /// </summary>
+    public void SetGroundSlamWaveSprite(Sprite sprite)
+    {
+        groundSlamWaveSprite = sprite;
+    }
+
+    /// <summary>
+    /// Set the sprite for meteor warning
+    /// </summary>
+    public void SetMeteorWarningSprite(Sprite sprite)
+    {
+        meteorWarningSprite = sprite;
+    }
+
+    /// <summary>
+    /// Set the sprite for meteor impact
+    /// </summary>
+    public void SetMeteorImpactSprite(Sprite sprite)
+    {
+        meteorImpactSprite = sprite;
+    }
+
     protected override void Die()
     {
-        Debug.Log("THE DEVIL HAS BEEN DEFEATED!");
+        Debug.Log("THE DEVIL HAS BEEN DEFEATED! VICTORY!");
 
-        // Could trigger special victory sequence here
-        base.Die();
+        // Create massive victory explosion effect
+        StartCoroutine(DeathExplosion());
+
+        // Don't destroy immediately - let explosion play
+        Destroy(gameObject, 2f);
+    }
+
+    private System.Collections.IEnumerator DeathExplosion()
+    {
+        // Multiple explosion waves
+        for (int wave = 0; wave < 3; wave++)
+        {
+            int explosionCount = 12;
+            float radius = 2f + wave * 2f;
+
+            for (int i = 0; i < explosionCount; i++)
+            {
+                float angle = (360f / explosionCount * i) * Mathf.Deg2Rad;
+                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                Vector3 explosionPos = transform.position + (Vector3)(direction * radius);
+
+                GameObject explosion = new GameObject("Victory Explosion");
+                explosion.transform.position = explosionPos;
+
+                SpriteRenderer sr = explosion.AddComponent<SpriteRenderer>();
+                sr.color = new Color(1f, 0.8f, 0f, 1f);
+                sr.sortingOrder = 10;
+
+                Destroy(explosion, 0.5f);
+            }
+
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    protected void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+        // Draw ground slam radius (available in all phases)
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, groundSlamRadius);
+
+        // Draw hellfire radius
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, hellFireRadius);
     }
 }
