@@ -260,9 +260,9 @@ MonoBehaviour:
   chaosLevel: 0
   coins: 20
   bossCoins: 20
-  coinsText: {fileID: 0}
-  bossCoinsText: {fileID: 0}
-  chaosLevelText: {fileID: 0}
+  coinsText: {fileID: 9166800350117891606}
+  bossCoinsText: {fileID: 6955510078781045910}
+  chaosLevelText: {fileID: 8948730851801125238}
 --- !u!1 &2528769881313156049
 GameObject:
   m_ObjectHideFlags: 0
