@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Health Upgrade", menuName = "Upgrades/Health Upgrade")]
+[CreateAssetMenu(fileName = "Health Upgrade", menuName = "Upgrades/Player Stats/Health Upgrade")]
 public class HealthUpgrade : Upgrade
 {
     public int Amount;

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d816544f459fe4d4fa36ceb26fbc4989
+guid: 7f94f7c905dab4847ba7caafffb72672
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,9 +127,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Bomb Unlock
+  - name: Hollow Point
     originalName: 
-    pivot: {x: 0.5555556, y: -0.107142866}
+    pivot: {x: 0.5, y: -0.21739131}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 27
-      height: 28
-    spriteID: b2c55602e1191204ebb337fad234755f
+      width: 12
+      height: 23
+    spriteID: e8d79fa0c2d36a44b9163b9e748b0b04
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 4167608250
+      value0: 424089339
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Bomb Unlock
+    name: Hollow Point
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Bomb Unlock
+    - name: Hollow Point
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
-        y: 3
-        width: 27
-        height: 28
-      spriteId: b2c55602e1191204ebb337fad234755f
+        x: 10
+        y: 5
+        width: 12
+        height: 23
+      spriteId: e8d79fa0c2d36a44b9163b9e748b0b04
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -182,4 +182,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 64}
+  previousTextureSize: {x: 32, y: 32}

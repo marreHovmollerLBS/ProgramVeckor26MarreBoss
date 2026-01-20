@@ -193,9 +193,12 @@ public class Player : Character
     /// </summary>
     public void ApplyUpgrades()
     {
-        foreach (Upgrade upg in PersistentPlayerManager.Instance.acquiredUpgrades)
+        if (PersistentPlayerManager.Instance.acquiredUpgrades != null)
         {
-            upg.ApplyUpgrade(this);
+            foreach (Upgrade upg in PersistentPlayerManager.Instance.acquiredUpgrades)
+            {
+                upg.ApplyUpgrade(this);
+            }
         }
     }
 
@@ -255,12 +258,24 @@ public class Player : Character
 
     #endregion
 
-    #region Attack Component Getters
+    #region Attack Component Getters / Setters
 
     public PlayerMeleeAttack GetMeleeAttack() => meleeAttack;
     public PlayerShootAttack GetShootAttack() => shootAttack;
     public PlayerGroundSlamAttack GetGroundSlamAttack() => groundSlamAttack;
     public PlayerBombAttack GetBombAttack() => bombAttack;
 
+    //MeleeAttack:
+    public void SetMeleeAttackDamage(int value) => meleeAttack.SetAttackDamage(value);
+    public void SetMeleeAttackKnockback(int value) => meleeAttack.SetKnockbackForce(value);
+    public void SetMeleeAttackRange(int value) => meleeAttack.SetAttackRange(value);
+    //BombAttack:
+    public void SetBombAttackRadius(int value) => bombAttack.SetExplosionRadius(value);
+    public void SetBombDamage(int value) => bombAttack.SetDamage(value);
+    //ShootAttack:
+    public void SetShootDamage(int value) => shootAttack.SetDamage(value);
+    //SlamAttack:
+    public void SetSlamDamage(int value) => groundSlamAttack.SetDamage(value);
+    public void SetSlamRadius(int value) => groundSlamAttack.SetRadius(value);
     #endregion
 }

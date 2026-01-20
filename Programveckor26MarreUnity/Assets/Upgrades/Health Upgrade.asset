@@ -17,5 +17,5 @@ MonoBehaviour:
   cost: 10
   chaosLevel: 1
   isBossUpgrade: 0
-  description: Increases Max Health by 2
-  Amount: 2
+  description: Increases Max Health by 20
+  Amount: 20

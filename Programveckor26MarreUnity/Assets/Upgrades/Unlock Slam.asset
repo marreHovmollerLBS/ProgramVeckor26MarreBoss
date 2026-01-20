@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36915ea70da99b6409b3a33457140b88, type: 3}
+  m_Name: Unlock Slam
+  m_EditorClassIdentifier: Assembly-CSharp::UnlockGroundSlam
+  icon: {fileID: -3798463580343213693, guid: 022e5405ed9bdd649af22c2cac00ce13, type: 3}
+  title: Unlock Ground Slam
+  cost: 1
+  chaosLevel: 10
+  isBossUpgrade: 1
+  description: Press 'C' to deal damage around you
