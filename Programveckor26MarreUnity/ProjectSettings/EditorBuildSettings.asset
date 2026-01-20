@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main/Main Scene.unity
     guid: 2ad02d2ca6de3af4ba03310187d59b06
+  - enabled: 1
+    path: Assets/Scenes/Marre/TheodorScen.unity
+    guid: bf5d57c5fe58d16488ce607759ea27bb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

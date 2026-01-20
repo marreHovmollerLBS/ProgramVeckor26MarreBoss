@@ -107,6 +107,10 @@ public class HealEnemy : Enemy
                 }
             }
         }
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.coins += 2;
+        }
 
         base.Die();
     }
@@ -330,6 +334,15 @@ public class EvilFather : Enemy
         usesAttackState = true;
         currentShieldHealth = shieldHealth;
     }
+    protected override void Die()
+    {
+        
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
+        base.Die();
+    }
 }
 
 /// <summary>
@@ -508,6 +521,15 @@ public class TheMare : Enemy
         base.InitializeEnemy(speed, health, dmg, sze, attack, goodDream, spawnIdleTime);
         gameObject.name = "The Mare";
         usesAttackState = true;
+    }
+    protected override void Die()
+    {
+
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
+        base.Die();
     }
 }
 
@@ -913,7 +935,7 @@ public class TheDevil : Enemy
             // Create warning indicator
             GameObject warning = new GameObject("Meteor Warning");
             warning.transform.position = spawnPos;
-            warning.transform.localScale = Vector3.one * 6f; // Scale transform to 6x (3 unit radius with 0.5 collider)
+            warning.transform.localScale = Vector3.one;
 
             SpriteRenderer warningRenderer = warning.AddComponent<SpriteRenderer>();
 
@@ -1021,6 +1043,12 @@ public class TheDevil : Enemy
 
         // Don't destroy immediately - let explosion play
         Destroy(gameObject, 2f);
+
+        base.Die();
+        if (PersistentPlayerManager.Instance != null)
+        {
+            PersistentPlayerManager.Instance.bossCoins += 1;
+        }
     }
 
     private System.Collections.IEnumerator DeathExplosion()

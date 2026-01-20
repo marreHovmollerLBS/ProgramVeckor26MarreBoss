@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cefc15fd67dcb44951d931de7b3158, type: 3}
   m_Name: Unlock Shoot
   m_EditorClassIdentifier: Assembly-CSharp::UnlockShoot
-  icon: {fileID: -8495531296267365597, guid: c130c8628550d5740954f76162a8592f, type: 3}
+  icon: {fileID: 6174959864699298617, guid: 3d2b44077864600498c1b70db549a69a, type: 3}
   title: Unlock Shoot
   cost: 1
   chaosLevel: 10

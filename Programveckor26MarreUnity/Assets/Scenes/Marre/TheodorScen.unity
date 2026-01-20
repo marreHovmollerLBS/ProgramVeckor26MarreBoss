@@ -1825,6 +1825,7 @@ GameObject:
   - component: {fileID: 1077092285}
   - component: {fileID: 1077092284}
   - component: {fileID: 1077092288}
+  - component: {fileID: 1077092289}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1847,21 +1848,56 @@ MonoBehaviour:
   startWithGoodDream: 0
   rounds:
   - roundName: Round 1 (Bad)
-    duration: 999
+    duration: 26
     enemies:
-    - enemyType: 2
-      spawnCount: 1
+    - enemyType: 0
+      spawnCount: 2
   - roundName: Round 2 (Good)
-    duration: 6
-    enemies: []
+    duration: 26
+    enemies:
+    - enemyType: 1
+      spawnCount: 2
+    - enemyType: 0
+      spawnCount: 1
   - roundName: Round 3 (Bad)
     duration: 26
     enemies:
     - enemyType: 0
-      spawnCount: 0
+      spawnCount: 5
   - roundName: Round 4 (Good)
+    duration: 13
+    enemies:
+    - enemyType: 1
+      spawnCount: 2
+    - enemyType: 0
+      spawnCount: 4
+  - roundName: Round 5 (Bad)
+    duration: 999
+    enemies:
+    - enemyType: 4
+      spawnCount: 1
+  - roundName: Round 6 (Good)
     duration: 26
-    enemies: []
+    enemies:
+    - enemyType: 1
+      spawnCount: 5
+  - roundName: Round 7 (Bad)
+    duration: 999
+    enemies:
+    - enemyType: 5
+      spawnCount: 1
+    - enemyType: 1
+      spawnCount: 2
+  - roundName: Round 8 (Good)
+    duration: 52
+    enemies:
+    - enemyType: 1
+      spawnCount: 8
+  - roundName: Round 9 (Bad)
+    duration: 999
+    enemies:
+    - enemyType: 6
+      spawnCount: 1
 --- !u!114 &1077092285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1905,13 +1941,28 @@ MonoBehaviour:
   meleeAttackColor: {r: 1, g: 1, b: 1, a: 1}
   showMeleeVisual: 1
   meleeAttackAspectRatio: {x: 1, y: 2}
-  bombAnimationFrames: []
+  bombAnimationFrames:
+  - {fileID: -5056423678770305581, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: 1506377491936782353, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: 8208061377519753504, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: -359377258782423488, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
+  - {fileID: -5482689335387388062, guid: b63b146c5d113ca42bcfce598d639cc9, type: 3}
   bombAnimationFrameRate: 12
-  explosionAnimationFrames: []
+  explosionAnimationFrames:
+  - {fileID: -927256298160664321, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
+  - {fileID: 2852912198536189370, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
+  - {fileID: -3375454431735621314, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
+  - {fileID: 448851393442037504, guid: 40f24743f2bcde746ad4039755b3caa8, type: 3}
   explosionAnimationFrameRate: 24
-  groundSlamAnimationFrames: []
-  groundSlamAnimationFrameRate: 24
-  projectileSprite: {fileID: -2413806693520163455, guid: a5d546fc62b011e4ab1fcc2a13ff4754, type: 3}
+  groundSlamAnimationFrames:
+  - {fileID: 3674126878385006771, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: 7232092496312929812, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: 3260510025509273934, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: 2893982367259311340, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: -1145535273593798336, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  - {fileID: -5585273380917199324, guid: e8cac831ab1e0aa46bbb9cf9acd28e88, type: 3}
+  groundSlamAnimationFrameRate: 12
+  projectileSprite: {fileID: -5639632816484659557, guid: 82691fe9326e6334db7f1d234678e8c9, type: 3}
   shootTowardsMouse: 0
   isGoodDream: 1
   defaultSpawnIdleTime: 1.25
@@ -1997,6 +2048,30 @@ MonoBehaviour:
   exitButton: 101
   skipRoundButton: 110
   gameManager: {fileID: 1077092286}
+  SwitchActivated: 0
+--- !u!114 &1077092289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077092283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePixelPerfect
+--- !u!114 &1086595824 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8948730851801125238, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+  m_PrefabInstance: {fileID: 1499809053}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1123228674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2165,6 +2240,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1246073855 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6955510078781045910, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+  m_PrefabInstance: {fileID: 1499809053}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1357589050
 GameObject:
   m_ObjectHideFlags: 0
@@ -2771,6 +2857,91 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &1499809053
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1274.6252
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1406.0228
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1259665110883206399, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379421167686256782, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_Name
+      value: PersistentPlayerManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379421167686256782, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: coins
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: bossCoins
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: coinsText
+      value: 
+      objectReference: {fileID: 1679175240}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: bossCoinsText
+      value: 
+      objectReference: {fileID: 1246073855}
+    - target: {fileID: 4086577154345517989, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: chaosLevelText
+      value: 
+      objectReference: {fileID: 1086595824}
+    - target: {fileID: 7465739126910468190, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
 --- !u!1 &1598443950
 GameObject:
   m_ObjectHideFlags: 0
@@ -2846,6 +3017,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1598443950}
   m_CullTransparentMesh: 1
+--- !u!114 &1679175240 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9166800350117891606, guid: e9ac5dbea0400c24f9ac4f0760460303, type: 3}
+  m_PrefabInstance: {fileID: 1499809053}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1688561605 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3082363647612233472, guid: be5856c03ece99f4f8416aecd55e7175, type: 3}
@@ -2952,3 +3134,4 @@ SceneRoots:
   - {fileID: 1367147465}
   - {fileID: 1123228676}
   - {fileID: 924641188}
+  - {fileID: 1499809053}

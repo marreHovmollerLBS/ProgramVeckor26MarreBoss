@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93f6b88f10e8ac46bf1b123e6303841, type: 3}
   m_Name: Unlock Bomb
   m_EditorClassIdentifier: Assembly-CSharp::UnlockBomb
-  icon: {fileID: 3215508296777083530, guid: 2d7500783edc31f409f7040fa9871e71, type: 3}
+  icon: {fileID: -2252211200330233862, guid: 9d572d3a84acf654ab3a7090210b1d78, type: 3}
   title: Unlock Bomb
   cost: 1
   chaosLevel: 10

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399433a91a01dcf4490d75e547980df5, type: 3}
   m_Name: Slam Radius Upgrade
   m_EditorClassIdentifier: Assembly-CSharp::SlamRadiusUpgrade
-  icon: {fileID: 0}
-  title: 
-  cost: 0
-  chaosLevel: 0
+  icon: {fileID: -8441869152836817708, guid: de502da1c74a9cf41a3ce8336cb1c639, type: 3}
+  title: Slam Radius Upgrade
+  cost: 5
+  chaosLevel: 2
   isBossUpgrade: 0
   description: 
-  Amount: 0
+  Amount: 25
