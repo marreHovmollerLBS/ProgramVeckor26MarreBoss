@@ -92,14 +92,18 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     public Player SpawnPlayer(Vector3 position, float speed = 4f, float health = 100f, float damage = 10f, float size = 0.5f, AttackType attackType = null)
     {
+        Debug.Log("SpawnPlayer called");
         GameObject playerObj;
 
         if (playerPrefab != null)
         {
+            Debug.Log("Using playerPrefab");
             playerObj = Instantiate(playerPrefab, position, Quaternion.identity);
+            Debug.Log($"Instantiated playerObj: {playerObj != null}");
         }
         else
         {
+            Debug.Log("Creating new GameObject for player");
             playerObj = new GameObject("Player");
             playerObj.transform.position = position;
         }
